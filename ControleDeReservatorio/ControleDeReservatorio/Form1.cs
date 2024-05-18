@@ -93,7 +93,7 @@ namespace ControleDeReservatorio
         /********************************  My personal fuctions ************************************************/
         private void initSerial()
         {
-            cbBaudRate.SelectedIndex = 2;
+            cbBaudRate.SelectedIndex = 1;
             loadSerialPorts();
         }
 
@@ -125,52 +125,76 @@ namespace ControleDeReservatorio
                 SystemSounds.Beep.Play();
         }
 
+        private void setImage(int numReserve, String nivel)
+        {
+            // 100-CHEIO, 90-QUASE CHEIO, 80-MUITO ALTO, 70-ALTO, 60-MEDIO ALTO, 50-MEDIO , 40-MEDIO BAIXO , 30-BAIXO , 20-QUASE VAZIO , 10-CRITICO , 0-VAZIO
+            String path = "";
+            if (nivel == "VAZIO") path = "0";
+            else if (nivel == "CRITICO") path = "10";
+            else if (nivel == "QUASE VAZIO") path = "20";
+            else if (nivel == "BAIXO") path = "30";
+            else if (nivel == "MEDIO BAIXO") path = "30";
+            else if (nivel == "MEDIO") path = "50";
+            else if (nivel == "MEDIO ALTO") path = "50";
+            else if (nivel == "ALTO") path = "70";
+            else if (nivel == "MUITO ALTO") path = "80";
+            else if (nivel == "QUASE CHEIO") path = "80";
+            else if (nivel == "CHEIO") path = "100";
+
+            if (numReserve==1)
+                imageReserve1.Load("../../Resources/reservatorio" + path+ ".png");
+            else
+                imageReserve2.Load("../../Resources/reservatorio" + path + ".png");
+        }
+
         private void receiveDataFromArduino(object sender, EventArgs e)
         {
-            //0 - R, 1 - nivelRes1, 2- sensorRes1, 3- estadoBomba1, 4- vazao1, 5 - nivelRes2, 6- sensorRes2, 7- estadoBomba2, 8- vazao2
-
+            // 0-R, 1-nivelReservatorio1, 2- leituraReservatorio1, 3-nivelReservatorio2, 4- leituraReservatorio2,
             String[] dados = serialPort1.ReadLine().Split('*');
-            if (dados.Length == 12)
+            if (dados.Length == 6)
             {
                 if (dados[0] == "R")
                 {
                     lblWaterLevel1.Text = dados[1];
-                    lblWaterLevel2.Text = dados[2];
-                    if (dados[1] == "VAZIO" || dados[1] == "CRITICO")
+                    lblWaterReading1.Text = dados[2];
+
+                    lblWaterLevel2.Text = dados[3];
+                    lblWaterReading2.Text = dados[4];
+
+                    if (dados[1] == "VAZIO" || dados[1]== "CRITICO" || dados[1] == "QUASE VAZIO")
                     {
-                        lblWaterLevel1.ForeColor = Color.Red;
+                        lblWaterLevel1.ForeColor = Color.FromArgb(220, 53, 69);     // VERMELHO danger
+                        lblWaterReading1.ForeColor = Color.FromArgb(220, 53, 69);   // VERMELHO danger
+                        turnOnAlarme();
                     }
                     else
                     {
-                        lblWaterLevel1.ForeColor = Color.FromArgb(0, 126, 249);
+                        lblWaterLevel1.ForeColor = Color.FromArgb(0, 126, 249);     
+                        lblWaterReading1.ForeColor = Color.FromArgb(0, 126, 249);   
                     }
 
-                    if (dados[2] == "VAZIO" || dados[2] == "CRITICO" || dados[2] == "EXCASSO")
+
+                    if (dados[3] == "VAZIO" || dados[3] == "CRITICO" || dados[3] == "QUASE VAZIO")
                     {
-                        lblWaterLevel2.ForeColor = Color.Red;
+                        lblWaterLevel2.ForeColor = Color.FromArgb(220, 53, 69);   
+                        lblWaterReading2.ForeColor = Color.FromArgb(220, 53, 69); 
+                        turnOnAlarme();
                     }
                     else
                     {
-                        lblWaterLevel2.ForeColor = Color.FromArgb(0, 126, 249);
+                        lblWaterLevel2.ForeColor = Color.FromArgb(0, 126, 249);     // verde success
+                        lblWaterReading2.ForeColor = Color.FromArgb(0, 126, 249);   // verde success
                     }
 
-                    imageReserve1.Load("../../Resources/bomba" + dados[3] + ".png");
-                    imageReserve2.Load("../../Resources/bomba" + dados[7] + ".png");
-
-                    if (dados[4] == "1")
-                    {
-                        turnOnAlarme();
-                    }
-
-                    if (dados[8] == "1")
-                    {
-                        turnOnAlarme();
-                    }
-
-                    
+                    setImage(1, dados[1]);
+                    setImage(2, dados[3]);
                 }
             }
         }
 
+        private void lblWaterReading1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

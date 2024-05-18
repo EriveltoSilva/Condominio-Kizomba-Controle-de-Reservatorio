@@ -124,4 +124,28 @@
   <data name="reservatorioVAZIO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\reservatorioVAZIO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="reservatorio0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio50" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio70" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio70.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio80" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio80.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reservatorio100" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reservatorio100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

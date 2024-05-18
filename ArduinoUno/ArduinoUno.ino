@@ -19,37 +19,36 @@
 ////////// Definição de Pinos e Objectos //////////
 #define LED 13
 
-#define SENSOR1_NIVEL1 22
-#define SENSOR1_NIVEL2 23
-#define SENSOR1_NIVEL3 24
-#define SENSOR1_NIVEL4 25
-#define SENSOR1_NIVEL5 26
-#define SENSOR1_NIVEL6 27
-#define SENSOR1_NIVEL7 28
-#define SENSOR1_NIVEL8 29
-#define SENSOR1_NIVEL9 30
-#define SENSOR1_NIVEL10 31
+#define SENSOR1_NIVEL1 2
+#define SENSOR1_NIVEL2 3
+#define SENSOR1_NIVEL3 4
+#define SENSOR1_NIVEL4 5
+#define SENSOR1_NIVEL5 6
+#define SENSOR1_NIVEL6 7
+#define SENSOR1_NIVEL7 8
+#define SENSOR1_NIVEL8 9
+#define SENSOR1_NIVEL9 10
+#define SENSOR1_NIVEL10 11
 
-#define BUZZER 32
+#define BUZZER A0
 
-#define LED_VERDE1 2
-#define LED_VERDE2 3
+//#define LED_VERDE1 2
+//#define LED_VERDE2 3
 
-#define LED_AMARELO3 4
-#define LED_AMARELO2 5
-#define LED_AMARELO1 6
+//#define LED_AMARELO3 4
+//#define LED_AMARELO2 5
+//#define LED_AMARELO1 6
 
-#define LED_LARANJA2 7
-#define LED_LARANJA1 8
+//#define LED_LARANJA2 7
+//#define LED_LARANJA1 8
 
-#define LED_VERMELHO3 9
-#define LED_VERMELHO2 10
-#define LED_VERMELHO1 11
+//#define LED_VERMELHO3 9
+//#define LED_VERMELHO2 10
+//#define LED_VERMELHO1 11
 
 
-#define ZERO "0%"
 #define VAZIO "VAZIO"
-
+#define ZERO "0%"
 #define LED_ON HIGH
 #define LED_OFF LOW
 //////////////////////////////////////////////////
@@ -57,11 +56,14 @@
 
 ///////////// Inclusão de Bibliotecas /////////////
 #include <Wire.h>
+#include <SoftwareSerial.h>
 #include <LiquidCrystal_I2C.h>
+
 //////////////////////////////////////////////////
 
 
 //////////////// Declaração de Objectos ///////////
+// SoftwareSerial mySerial(11, 12); // RX, TX
 LiquidCrystal_I2C lcd1(0x27, 20, 4);  // set the LCD address to 0x27 for a 20X04
 LiquidCrystal_I2C lcd2(0x26, 20, 4);  // set the LCD address to 0x26 for a 20X04
 ///////////////////////////////////////////////////
@@ -74,43 +76,45 @@ String nivelReservatorio1 = VAZIO;    /////
 String leituraReservatorio2 = ZERO;  /////
 String nivelReservatorio2 = VAZIO;    /////
 
+
+
 void setup() {
-  pinMode(SENSOR1_NIVEL1, INPUT);
-  pinMode(SENSOR1_NIVEL2, INPUT);
-  pinMode(SENSOR1_NIVEL3, INPUT);
-  pinMode(SENSOR1_NIVEL4, INPUT);
-  pinMode(SENSOR1_NIVEL5, INPUT);
-  pinMode(SENSOR1_NIVEL6, INPUT);
-  pinMode(SENSOR1_NIVEL7, INPUT);
-  pinMode(SENSOR1_NIVEL8, INPUT);
-  pinMode(SENSOR1_NIVEL9, INPUT);
-  pinMode(SENSOR1_NIVEL10, INPUT);
+  pinMode(SENSOR1_NIVEL1, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL2, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL3, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL4, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL5, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL6, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL7, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL8, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL9, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL10, INPUT_PULLUP);
 
   pinMode(BUZZER, OUTPUT);
 
-  pinMode(LED_VERDE1, OUTPUT);
-  pinMode(LED_VERDE2, OUTPUT);
-  digitalWrite(LED_VERDE1, LOW);
-  digitalWrite(LED_VERDE2, LOW);
+  //pinMode(LED_VERDE1, OUTPUT);
+  //pinMode(LED_VERDE2, OUTPUT);
+  //digitalWrite(LED_VERDE1, LOW);
+  //digitalWrite(LED_VERDE2, LOW);
 
-  pinMode(LED_AMARELO3, OUTPUT);
-  pinMode(LED_AMARELO2, OUTPUT);
-  pinMode(LED_AMARELO1, OUTPUT);
-  digitalWrite(LED_AMARELO3, LOW);
-  digitalWrite(LED_AMARELO2, LOW);
-  digitalWrite(LED_AMARELO1, LOW);
+  //pinMode(LED_AMARELO3, OUTPUT);
+  //pinMode(LED_AMARELO2, OUTPUT);
+  //pinMode(LED_AMARELO1, OUTPUT);
+  //digitalWrite(LED_AMARELO3, LOW);
+  //digitalWrite(LED_AMARELO2, LOW);
+  //digitalWrite(LED_AMARELO1, LOW);
 
-  pinMode(LED_LARANJA2, OUTPUT);
-  pinMode(LED_LARANJA1, OUTPUT);
-  digitalWrite(LED_LARANJA2, LOW);
-  digitalWrite(LED_LARANJA1, LOW);
+  //pinMode(LED_LARANJA2, OUTPUT);
+  //pinMode(LED_LARANJA1, OUTPUT);
+  //digitalWrite(LED_LARANJA2, LOW);
+  //digitalWrite(LED_LARANJA1, LOW);
 
-  pinMode(LED_VERMELHO3, OUTPUT);
-  pinMode(LED_VERMELHO2, OUTPUT);
-  pinMode(LED_VERMELHO1, OUTPUT);
-  digitalWrite(LED_VERMELHO3, LOW);
-  digitalWrite(LED_VERMELHO2, LOW);
-  digitalWrite(LED_VERMELHO1, LOW);
+  //pinMode(LED_VERMELHO3, OUTPUT);
+  //pinMode(LED_VERMELHO2, OUTPUT);
+  //pinMode(LED_VERMELHO1, OUTPUT);
+  //digitalWrite(LED_VERMELHO3, LOW);
+  //digitalWrite(LED_VERMELHO2, LOW);
+  //digitalWrite(LED_VERMELHO1, LOW);
 
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
@@ -143,8 +147,8 @@ void setup() {
 
   Serial.begin(9600);
   delay(1000);
-  Serial2.begin(9600);
-  delay(1000);
+  // mySerial.begin(9600);
+  // delay(1000);
   Serial.println("SISTEMA INICIADO COM SUCESSO!");
 }
 
@@ -165,11 +169,12 @@ void loop() {
 
 //////////////////////////////////////////////////////////
 void enviarDados() {
+  // 0-R, 1-nivelReservatorio1, 2- leituraReservatorio1, 3-nivelReservatorio2, 4- leituraReservatorio2,
   String texto = "R*";
   texto += nivelReservatorio1 + "*" + leituraReservatorio1 + "*";
   texto += nivelReservatorio2 + "*" + leituraReservatorio2 + "*";
   Serial.println(texto);
-  Serial2.println(texto);
+  // mySerial.println(texto);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -209,77 +214,77 @@ void desligarAlarme() {
 
 ///////////////////////////////////////////////////////////////////////////////////
 void setNivel1(bool nivel1, bool nivel2, bool nivel3, bool nivel4, bool nivel5, bool nivel6, bool nivel7, bool nivel8, bool nivel9, bool nivel10) {
-  digitalWrite(LED_VERDE1, nivel1);
-  digitalWrite(LED_VERDE2, nivel2);
-  digitalWrite(LED_AMARELO3, nivel3);
-  digitalWrite(LED_AMARELO2, nivel4);
-  digitalWrite(LED_AMARELO1, nivel5);
-  digitalWrite(LED_LARANJA2, nivel6);
-  digitalWrite(LED_LARANJA1, nivel7);
-  digitalWrite(LED_VERMELHO3, nivel8);
-  digitalWrite(LED_VERMELHO2, nivel9);
-  digitalWrite(LED_VERMELHO1, nivel10);
+  // digitalWrite(LED_VERDE1, nivel1);
+  // digitalWrite(LED_VERDE2, nivel2);
+  // digitalWrite(LED_AMARELO3, nivel3);
+  // digitalWrite(LED_AMARELO2, nivel4);
+  // digitalWrite(LED_AMARELO1, nivel5);
+  // digitalWrite(LED_LARANJA2, nivel6);
+  // digitalWrite(LED_LARANJA1, nivel7);
+  // digitalWrite(LED_VERMELHO3, nivel8);
+  // digitalWrite(LED_VERMELHO2, nivel9);
+  // digitalWrite(LED_VERMELHO1, nivel10);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-void MedioMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
+// void MedioMessage() {
+//   mySerial.println("AT+CMGF=1");
+//   delay(1000);
 
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
+//   mySerial.println("AT+CMGS=\"+244946128147\"\r");  
+//   mySerial.println("AT+CMGS=\"+244928322931\"\r");  
+//   delay(1000);
 
-  Serial2.println("Tanque FW1 a 50%, Nivel ao Meio");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-void CriticoMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 a 30%, Nivel Critico");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
+//   mySerial.println("Tanque FW1 a 50%, Nivel ao Meio");
+//   delay(100);
+//   mySerial.println((char)26);
+//   delay(1000);
+// }
 
 ///////////////////////////////////////////////////////////////////////////////////
-void SuperCriticoMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
+// void CriticoMessage() {
+//   mySerial.println("AT+CMGF=1");
+//   delay(1000);
 
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
+//   mySerial.println("AT+CMGS=\"+244946128147\"\r");  
+//   mySerial.println("AT+CMGS=\"+244928322931\"\r");  
+//   delay(1000);
 
-  Serial2.println("Tanque FW1 a 10%, Nivel Super Critico");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
+//   mySerial.println("Tanque FW1 a 30%, Nivel Critico");
+//   delay(100);
+//   mySerial.println((char)26);
+//   delay(1000);
+// }
 
 ///////////////////////////////////////////////////////////////////////////////////
-void VazioMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
+// void SuperCriticoMessage() {
+//   mySerial.println("AT+CMGF=1");
+//   delay(1000);
 
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
+//   mySerial.println("AT+CMGS=\"+244946128147\"\r");  
+//   mySerial.println("AT+CMGS=\"+244928322931\"\r");  
+//   delay(1000);
 
-  Serial2.println("Tanque FW1 Vazio");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
+//   mySerial.println("Tanque FW1 a 10%, Nivel Super Critico");
+//   delay(100);
+//   mySerial.println((char)26);
+//   delay(1000);
+// }
+
+///////////////////////////////////////////////////////////////////////////////////
+// void VazioMessage() {
+//   mySerial.println("AT+CMGF=1");
+//   delay(1000);
+
+//   mySerial.println("AT+CMGS=\"+244946128147\"\r");
+//   mySerial.println("AT+CMGS=\"+244928322931\"\r");
+//   delay(1000);
+
+//   mySerial.println("Tanque FW1 Vazio");
+//   delay(100);
+//   mySerial.println((char)26);
+//   delay(1000);
+// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void lerSensores() {
@@ -344,12 +349,15 @@ void lerSensores() {
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
+  
+
   // sexto Nivel - 50% - 2,25 m^2 - cinco leds apagados
   else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
            && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
     Serial.println("Nivel 60 a 50%");
     nivelReservatorio1 = "MEDIO";
     leituraReservatorio1 = "50%";
+    // MedioMessage();
     desligarAlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
@@ -360,7 +368,7 @@ void lerSensores() {
     Serial.println("Nivel 50 a 40%");
     nivelReservatorio1 = "MEDIO BAIXO";
     leituraReservatorio1 = "40%";
-    MedioMessage();
+    // MedioMessage();
     desligarAlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON);
   }
@@ -371,7 +379,7 @@ void lerSensores() {
     Serial.println("Nivel 40 a 30%");
     nivelReservatorio1 = "BAIXO";
     leituraReservatorio1 = "30%";
-    CriticoMessage();
+    // CriticoMessage();
     desligarAlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON);
   }
@@ -392,7 +400,7 @@ void lerSensores() {
     Serial.println("Nivel 20 a 10%");
     nivelReservatorio1 = "CRITICO";
     leituraReservatorio1 = "10%";
-    SuperCriticoMessage();
+    // SuperCriticoMessage();
     ligarlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON);
   }
@@ -403,7 +411,7 @@ void lerSensores() {
     Serial.println("Nivel 0%");
     nivelReservatorio1 = "VAZIO";
     leituraReservatorio1 = "0%";
-    VazioMessage();
+    // VazioMessage();
     ligarlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF);
   }

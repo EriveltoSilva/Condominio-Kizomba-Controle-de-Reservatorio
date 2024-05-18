@@ -86,6 +86,30 @@
   <ItemGroup>
     <None Include="Resources\reservatorioVAZIO.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio70.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio80.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reservatorio100.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
