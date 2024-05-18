@@ -43,33 +43,33 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.lbl_login_date = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.lblWaterReading1 = new System.Windows.Forms.Label();
+            this.imageReserve1 = new System.Windows.Forms.PictureBox();
             this.panel6 = new System.Windows.Forms.Panel();
             this.lblWaterLevel1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.lblWaterReading2 = new System.Windows.Forms.Label();
+            this.imageReserve2 = new System.Windows.Forms.PictureBox();
             this.panel8 = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
             this.lblWaterLevel2 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.imageReserve2 = new System.Windows.Forms.PictureBox();
-            this.imageReserve1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lblWaterReading1 = new System.Windows.Forms.Label();
-            this.lblWaterReading2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageReserve1)).BeginInit();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
-            this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageReserve2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageReserve1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -232,6 +232,16 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Username";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ControleDeReservatorio.Properties.Resources.Usuario;
+            this.pictureBox1.Location = new System.Drawing.Point(83, 27);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(65, 65);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.TabStop = false;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -249,7 +259,7 @@
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(1528, 12);
+            this.btnExit.Location = new System.Drawing.Point(1516, 23);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(40, 42);
             this.btnExit.TabIndex = 2;
@@ -268,6 +278,28 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(557, 560);
             this.panel5.TabIndex = 3;
+            // 
+            // lblWaterReading1
+            // 
+            this.lblWaterReading1.AutoSize = true;
+            this.lblWaterReading1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWaterReading1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(120)))), ((int)(((byte)(236)))));
+            this.lblWaterReading1.Location = new System.Drawing.Point(222, 199);
+            this.lblWaterReading1.Name = "lblWaterReading1";
+            this.lblWaterReading1.Size = new System.Drawing.Size(166, 25);
+            this.lblWaterReading1.TabIndex = 2;
+            this.lblWaterReading1.Text = "NÃO DEFINIDO";
+            this.lblWaterReading1.Click += new System.EventHandler(this.lblWaterReading1_Click);
+            // 
+            // imageReserve1
+            // 
+            this.imageReserve1.Image = global::ControleDeReservatorio.Properties.Resources.reservatorioVAZIO;
+            this.imageReserve1.Location = new System.Drawing.Point(139, 227);
+            this.imageReserve1.Name = "imageReserve1";
+            this.imageReserve1.Size = new System.Drawing.Size(249, 318);
+            this.imageReserve1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.imageReserve1.TabIndex = 0;
+            this.imageReserve1.TabStop = false;
             // 
             // panel6
             // 
@@ -323,6 +355,27 @@
             this.panel7.Size = new System.Drawing.Size(532, 560);
             this.panel7.TabIndex = 4;
             // 
+            // lblWaterReading2
+            // 
+            this.lblWaterReading2.AutoSize = true;
+            this.lblWaterReading2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWaterReading2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(120)))), ((int)(((byte)(236)))));
+            this.lblWaterReading2.Location = new System.Drawing.Point(181, 199);
+            this.lblWaterReading2.Name = "lblWaterReading2";
+            this.lblWaterReading2.Size = new System.Drawing.Size(166, 25);
+            this.lblWaterReading2.TabIndex = 3;
+            this.lblWaterReading2.Text = "NÃO DEFINIDO";
+            // 
+            // imageReserve2
+            // 
+            this.imageReserve2.Image = global::ControleDeReservatorio.Properties.Resources.reservatorio80;
+            this.imageReserve2.Location = new System.Drawing.Point(139, 227);
+            this.imageReserve2.Name = "imageReserve2";
+            this.imageReserve2.Size = new System.Drawing.Size(197, 318);
+            this.imageReserve2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.imageReserve2.TabIndex = 0;
+            this.imageReserve2.TabStop = false;
+            // 
             // panel8
             // 
             this.panel8.Controls.Add(this.label6);
@@ -365,59 +418,6 @@
             this.label9.TabIndex = 0;
             this.label9.Text = "Reservatorio nº2";
             // 
-            // imageReserve2
-            // 
-            this.imageReserve2.Image = global::ControleDeReservatorio.Properties.Resources.reservatorio80;
-            this.imageReserve2.Location = new System.Drawing.Point(139, 227);
-            this.imageReserve2.Name = "imageReserve2";
-            this.imageReserve2.Size = new System.Drawing.Size(197, 318);
-            this.imageReserve2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.imageReserve2.TabIndex = 0;
-            this.imageReserve2.TabStop = false;
-            // 
-            // imageReserve1
-            // 
-            this.imageReserve1.Image = global::ControleDeReservatorio.Properties.Resources.reservatorioVAZIO;
-            this.imageReserve1.Location = new System.Drawing.Point(139, 227);
-            this.imageReserve1.Name = "imageReserve1";
-            this.imageReserve1.Size = new System.Drawing.Size(249, 318);
-            this.imageReserve1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.imageReserve1.TabIndex = 0;
-            this.imageReserve1.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::ControleDeReservatorio.Properties.Resources.Usuario;
-            this.pictureBox1.Location = new System.Drawing.Point(83, 27);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(65, 65);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
-            // 
-            // lblWaterReading1
-            // 
-            this.lblWaterReading1.AutoSize = true;
-            this.lblWaterReading1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWaterReading1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(120)))), ((int)(((byte)(236)))));
-            this.lblWaterReading1.Location = new System.Drawing.Point(222, 199);
-            this.lblWaterReading1.Name = "lblWaterReading1";
-            this.lblWaterReading1.Size = new System.Drawing.Size(166, 25);
-            this.lblWaterReading1.TabIndex = 2;
-            this.lblWaterReading1.Text = "NÃO DEFINIDO";
-            this.lblWaterReading1.Click += new System.EventHandler(this.lblWaterReading1_Click);
-            // 
-            // lblWaterReading2
-            // 
-            this.lblWaterReading2.AutoSize = true;
-            this.lblWaterReading2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWaterReading2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(9)))), ((int)(((byte)(120)))), ((int)(((byte)(236)))));
-            this.lblWaterReading2.Location = new System.Drawing.Point(181, 199);
-            this.lblWaterReading2.Name = "lblWaterReading2";
-            this.lblWaterReading2.Size = new System.Drawing.Size(166, 25);
-            this.lblWaterReading2.TabIndex = 3;
-            this.lblWaterReading2.Text = "NÃO DEFINIDO";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -439,17 +439,17 @@
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageReserve1)).EndInit();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageReserve2)).EndInit();
             this.panel8.ResumeLayout(false);
             this.panel8.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imageReserve2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageReserve1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -15,8 +15,18 @@
  *** 10-LCD WITH I2C (1)
  ***
 */
+////////////////////// Definições /////////////////////
+//#define DEBUG false
+#define DEBUG true
 
-////////// Definição de Pinos e Objectos //////////
+#define LED_ON HIGH
+#define LED_OFF LOW
+
+#define ZERO "0%"
+#define VAZIO "VAZIO"
+///////////////////////////////////////////////////////
+
+////////// Definição de Pinos e Objectos /////////////
 #define LED 13
 
 #define SENSOR1_NIVEL1 22
@@ -45,15 +55,7 @@
 #define LED_VERMELHO3 9
 #define LED_VERMELHO2 10
 #define LED_VERMELHO1 11
-
-
-#define ZERO "0%"
-#define VAZIO "VAZIO"
-
-#define LED_ON HIGH
-#define LED_OFF LOW
 //////////////////////////////////////////////////
-
 
 ///////////// Inclusão de Bibliotecas /////////////
 #include <Wire.h>
@@ -77,16 +79,16 @@ String leituraReservatorio2 = ZERO;  /////
 String nivelReservatorio2 = VAZIO;   /////
 
 void setup() {
-  pinMode(SENSOR1_NIVEL1, INPUT);
-  pinMode(SENSOR1_NIVEL2, INPUT);
-  pinMode(SENSOR1_NIVEL3, INPUT);
-  pinMode(SENSOR1_NIVEL4, INPUT);
-  pinMode(SENSOR1_NIVEL5, INPUT);
-  pinMode(SENSOR1_NIVEL6, INPUT);
-  pinMode(SENSOR1_NIVEL7, INPUT);
-  pinMode(SENSOR1_NIVEL8, INPUT);
-  pinMode(SENSOR1_NIVEL9, INPUT);
-  pinMode(SENSOR1_NIVEL10, INPUT);
+  pinMode(SENSOR1_NIVEL1, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL2, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL3, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL4, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL5, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL6, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL7, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL8, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL9, INPUT_PULLUP);
+  pinMode(SENSOR1_NIVEL10, INPUT_PULLUP);
 
   pinMode(BUZZER, OUTPUT);
 
@@ -174,10 +176,10 @@ void loop() {
       imprimirDadosLCD(lcd1, "RESERVATORIO FW1", nivelReservatorio1, leituraReservatorio1);
       imprimirDadosLCD(lcd2, "RESERVATORIO FW2", nivelReservatorio2, leituraReservatorio2);
     }
-    digitalWrite(LED, digitalRead(LED));
+    digitalWrite(LED, !digitalRead(LED));
   }
 
-  delay(200);
+  delay(50);
 }
 
 
@@ -199,13 +201,9 @@ void imprimirDadosLCD(LiquidCrystal_I2C lcd, String reservatorio, String nivel, 
   lcd.print(reservatorio);
   lcd.setCursor(0, 1);
   if (flag) {
-    Serial.println("Okkk");
     lcd.print("NIVEL:");
     lcd.print(nivel);
-    lcd.setCursor(0, 12);
   } else {
-    Serial.println("sdaasd");
-    lcd.setCursor(0, 1);
     lcd.print("LEITURA:");
     lcd.print(leitura);
   }
@@ -298,16 +296,32 @@ void VazioMessage() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void lerSensores() {
-  int sensor1 = digitalRead(SENSOR1_NIVEL1);
-  int sensor2 = digitalRead(SENSOR1_NIVEL2);
-  int sensor3 = digitalRead(SENSOR1_NIVEL3);
-  int sensor4 = digitalRead(SENSOR1_NIVEL4);
-  int sensor5 = digitalRead(SENSOR1_NIVEL5);
-  int sensor6 = digitalRead(SENSOR1_NIVEL6);
-  int sensor7 = digitalRead(SENSOR1_NIVEL7);
-  int sensor8 = digitalRead(SENSOR1_NIVEL8);
-  int sensor9 = digitalRead(SENSOR1_NIVEL9);
-  int sensor10 = digitalRead(SENSOR1_NIVEL10);
+  int sensor1 = !digitalRead(SENSOR1_NIVEL1);
+  int sensor2 = !digitalRead(SENSOR1_NIVEL2);
+  int sensor3 = !digitalRead(SENSOR1_NIVEL3);
+  int sensor4 = !digitalRead(SENSOR1_NIVEL4);
+  int sensor5 = !digitalRead(SENSOR1_NIVEL5);
+  int sensor6 = !digitalRead(SENSOR1_NIVEL6);
+  int sensor7 = !digitalRead(SENSOR1_NIVEL7);
+  int sensor8 = !digitalRead(SENSOR1_NIVEL8);
+  int sensor9 = !digitalRead(SENSOR1_NIVEL9);
+  int sensor10= !digitalRead(SENSOR1_NIVEL10);
+
+  if(DEBUG)
+  {
+    Serial.println("===========================================");
+    Serial.println("SENSOR1:"+String(sensor1));
+    Serial.println("SENSOR2:"+String(sensor2));
+    Serial.println("SENSOR3:"+String(sensor3));
+    Serial.println("SENSOR4:"+String(sensor4));
+    Serial.println("SENSOR5:"+String(sensor5));
+    Serial.println("SENSOR6:"+String(sensor6));
+    Serial.println("SENSOR7:"+String(sensor7));
+    Serial.println("SENSOR8:"+String(sensor8));
+    Serial.println("SENSOR9:"+String(sensor9));
+    Serial.println("SENSOR10:"+String(sensor10));
+    Serial.println("===========================================");
+  }
 
   // Primeiro Nivel - 100% - 4,5 m^2 - todos os leds acesso
   if ((sensor1 == 1) && (sensor2 == 1) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
