@@ -1,5 +1,5 @@
 /*
-   Autor:ETO(By: Erivelto Silva)
+   Autor:ETO(By: Alfredo Muongo & Erivelto Silva)
    Data última Atualização:18/05/2024
    Objectivo: Controle o nível de água em 2 reservatórios no Condominio Kizomba
 
