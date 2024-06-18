@@ -188,6 +188,7 @@
             this.btnSilent.TabIndex = 1;
             this.btnSilent.Text = "Silenciar Alarme";
             this.btnSilent.UseVisualStyleBackColor = true;
+            this.btnSilent.Visible = false;
             this.btnSilent.Click += new System.EventHandler(this.btnSilent_Click);
             // 
             // panel2
@@ -220,6 +221,7 @@
             this.lbl_login_date.Size = new System.Drawing.Size(158, 15);
             this.lbl_login_date.TabIndex = 2;
             this.lbl_login_date.Text = "Ligado desde: 14:31:02";
+            this.lbl_login_date.Visible = false;
             // 
             // label1
             // 

@@ -64,12 +64,18 @@
 
 
 //////////////// Declaração de Objectos ///////////
-LiquidCrystal_I2C lcd1(0x27, 16, 2);  // set the LCD address to 0x27 for a 16X02
-LiquidCrystal_I2C lcd2(0x23, 16, 2);  // set the LCD address to 0x26 for a 16X02
+LiquidCrystal_I2C lcd1(0x23, 16, 2);  // set the LCD address to 0x26 for a 16X02
+LiquidCrystal_I2C lcd2(0x27, 16, 2);  // set the LCD address to 0x27 for a 16X02
 ///////////////////////////////////////////////////
 
 byte cont = 0;
 bool flag = false;
+
+bool flagEnvioMedio=false;
+bool flagEnvioCritico=false;
+bool flagEnvioSuperCritico=false;
+bool flagEnvioVazio=false;
+
 
 unsigned long int temporizador = 0;
 String leituraReservatorio1 = ZERO;  /////
@@ -77,6 +83,8 @@ String nivelReservatorio1 = VAZIO;   /////
 
 String leituraReservatorio2 = ZERO;  /////
 String nivelReservatorio2 = VAZIO;   /////
+
+const String PHONE_NUMBER = "+244946128147";
 
 void setup() {
   pinMode(SENSOR1_NIVEL1, INPUT_PULLUP);
@@ -127,7 +135,7 @@ void setup() {
   delay(50);
 
   lcd2.init();       // inicializando o Dispaly
-  lcd1.backlight();  // mantem a luz do LCD acesso
+  lcd2.backlight();  // mantem a luz do LCD acesso
   delay(50);
 
   lcd1.clear();
@@ -147,19 +155,20 @@ void setup() {
   lcd1.setCursor(0, 0);
   lcd1.print("CONDOM. KIZOMBA");
   lcd1.setCursor(0, 1);
-  lcd1.print("RESERVATORIO FW1");
+  lcd1.print("RESERVATORIO RW1");
 
   lcd2.clear();
   lcd2.setCursor(0, 0);
   lcd2.print("CONDOM. KIZOMBA");
   lcd2.setCursor(0, 1);
-  lcd2.print("RESERVATORIO FW2");
+  lcd2.print("RESERVATORIO RW2");
 
 
   Serial.begin(9600);
   delay(1000);
   Serial2.begin(9600);
   delay(1000);
+  sendSMS(PHONE_NUMBER, "## CONTROLE DE TANQUES FW1 & FW2 ON ##");
   Serial.println("SISTEMA INICIADO COM SUCESSO!");
 }
 
@@ -173,8 +182,8 @@ void loop() {
     {
       cont =0;
       flag = !flag;
-      imprimirDadosLCD(lcd1, "RESERVATORIO FW1", nivelReservatorio1, leituraReservatorio1);
-      imprimirDadosLCD(lcd2, "RESERVATORIO FW2", nivelReservatorio2, leituraReservatorio2);
+      imprimirDadosLCD(lcd1, "RESERVATORIO RW1", nivelReservatorio1, leituraReservatorio1);
+      imprimirDadosLCD(lcd2, "RESERVATORIO RW2", nivelReservatorio2, leituraReservatorio2);
     }
     digitalWrite(LED, !digitalRead(LED));
   }
@@ -234,65 +243,93 @@ void setNivel1(bool nivel1, bool nivel2, bool nivel3, bool nivel4, bool nivel5, 
   digitalWrite(LED_VERMELHO1, nivel10);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-void MedioMessage() {
+/////////////////////////////////////////////////////////
+void sendSMS(const String number, String sms)
+{
+  Serial.print("SMS: "); Serial.println(sms);
   Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 a 50%, Nivel ao Meio");
+  delay(1000);  comunication();
+  Serial2.println("AT+CMGS=\"" + number + "\"\r");
+  delay(1000);  comunication();
+  Serial2.println(sms);
   delay(100);
   Serial2.println((char)26);
-  delay(1000);
+  delay(1000);  comunication();
+  delay(4000);
+  Serial.println("\n################ SMS SENT! #################");
+}
+
+/////////////////////////////////////////////////////////
+void comunication()
+{
+  if (Serial.available())
+    while (Serial.available())
+      Serial2.write(Serial.read());
+
+  if (Serial2.available())
+    while (Serial2.available())
+      Serial.write(Serial2.read());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-void CriticoMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
+// void MedioMessage() {
+//   Serial2.println("AT+CMGF=1");
+//   delay(1000);
 
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
+//   Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+//   Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+//   delay(1000);
 
-  Serial2.println("Tanque FW1 a 30%, Nivel Critico");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-void SuperCriticoMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 a 10%, Nivel Super Critico");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
+//   Serial2.println("Tanque FW1 a 50%, Nivel ao Meio");
+//   delay(100);
+//   Serial2.println((char)26);
+//   delay(1000);
+// }
 
 ///////////////////////////////////////////////////////////////////////////////////
-void VazioMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
+// void CriticoMessage() {
+//   Serial2.println("AT+CMGF=1");
+//   delay(1000);
 
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
+//   Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+//   Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+//   delay(1000);
 
-  Serial2.println("Tanque FW1 Vazio");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
+//   Serial2.println("Tanque FW1 a 30%, Nivel Critico");
+//   delay(100);
+//   Serial2.println((char)26);
+//   delay(1000);
+// }
+
+///////////////////////////////////////////////////////////////////////////////////
+// void SuperCriticoMessage() {
+//   Serial2.println("AT+CMGF=1");
+//   delay(1000);
+
+//   Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+//   Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+//   delay(1000);
+
+//   Serial2.println("Tanque FW1 a 10%, Nivel Super Critico");
+//   delay(100);
+//   Serial2.println((char)26);
+//   delay(1000);
+// }
+
+///////////////////////////////////////////////////////////////////////////////////
+// void VazioMessage() {
+//   Serial2.println("AT+CMGF=1");
+//   delay(1000);
+
+//   Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+//   Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+//   delay(1000);
+
+//   Serial2.println("Tanque FW1 Vazio");
+//   delay(100);
+//   Serial2.println((char)26);
+//   delay(1000);
+// }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void lerSensores() {
@@ -310,16 +347,16 @@ void lerSensores() {
   if(DEBUG)
   {
     Serial.println("===========================================");
-    Serial.println("SENSOR1:"+String(sensor1));
-    Serial.println("SENSOR2:"+String(sensor2));
-    Serial.println("SENSOR3:"+String(sensor3));
-    Serial.println("SENSOR4:"+String(sensor4));
-    Serial.println("SENSOR5:"+String(sensor5));
-    Serial.println("SENSOR6:"+String(sensor6));
-    Serial.println("SENSOR7:"+String(sensor7));
-    Serial.println("SENSOR8:"+String(sensor8));
-    Serial.println("SENSOR9:"+String(sensor9));
-    Serial.println("SENSOR10:"+String(sensor10));
+    Serial.println("SENSOR10:"+String(sensor1));
+    Serial.println("SENSOR9:"+String(sensor2));
+    Serial.println("SENSOR8:"+String(sensor3));
+    Serial.println("SENSOR7:"+String(sensor4));
+    Serial.println("SENSOR6:"+String(sensor5));
+    Serial.println("SENSOR5:"+String(sensor6));
+    Serial.println("SENSOR4:"+String(sensor7));
+    Serial.println("SENSOR3:"+String(sensor8));
+    Serial.println("SENSOR2:"+String(sensor9));
+    Serial.println("SENSOR1:"+String(sensor10));
     Serial.println("===========================================");
   }
 
@@ -329,6 +366,7 @@ void lerSensores() {
     Serial.println("Reservatorio Cheio");
     nivelReservatorio1 = "CHEIO";
     leituraReservatorio1 = "100%";
+    
     setNivel1(LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
     desligarAlarme();
   }
@@ -361,6 +399,10 @@ void lerSensores() {
     leituraReservatorio1 = "70%";
     desligarAlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
+    flagEnvioMedio=false;
+    flagEnvioCritico=false;
+    flagEnvioSuperCritico=false;
+    flagEnvioVazio=false;
   }
 
   // Quinto Nivel - 60% - 2,7 m^2 - quatro leds apagados
@@ -380,6 +422,12 @@ void lerSensores() {
     nivelReservatorio1 = "MEDIO";
     leituraReservatorio1 = "50%";
     desligarAlarme();
+    // MedioMessage();
+    if(!flagEnvioMedio)
+    {
+      flagEnvioMedio=true;
+      sendSMS(PHONE_NUMBER, "TANQUE FW1 A 50%, NIVEL MEDIO");
+    }
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
@@ -389,7 +437,6 @@ void lerSensores() {
     Serial.println("Nivel 50 a 40%");
     nivelReservatorio1 = "MEDIO BAIXO";
     leituraReservatorio1 = "40%";
-    MedioMessage();
     desligarAlarme();
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON);
   }
@@ -400,8 +447,13 @@ void lerSensores() {
     Serial.println("Nivel 40 a 30%");
     nivelReservatorio1 = "BAIXO";
     leituraReservatorio1 = "30%";
-    CriticoMessage();
+    // CriticoMessage();
     desligarAlarme();
+    if(!flagEnvioCritico)
+    {
+      flagEnvioCritico=true;
+      sendSMS(PHONE_NUMBER, "TANQUE FW1 A 30%, NIVEL CRITICO");
+    }
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON);
   }
 
@@ -421,8 +473,13 @@ void lerSensores() {
     Serial.println("Nivel 20 a 10%");
     nivelReservatorio1 = "CRITICO";
     leituraReservatorio1 = "10%";
-    SuperCriticoMessage();
+    // SuperCriticoMessage();
     ligarlarme();
+    if(!flagEnvioSuperCritico)
+    {
+      flagEnvioSuperCritico=true;
+      sendSMS(PHONE_NUMBER, "TANQUE FW1 A 10%, NIVEL SUPER CRITICO");
+    }
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON);
   }
 
@@ -432,8 +489,13 @@ void lerSensores() {
     Serial.println("Nivel 0%");
     nivelReservatorio1 = "VAZIO";
     leituraReservatorio1 = "0%";
-    VazioMessage();
+    // VazioMessage();
     ligarlarme();
+    if(!flagEnvioVazio)
+    {
+      flagEnvioVazio=true;
+      sendSMS(PHONE_NUMBER, "TANQUE FW1 A 0%, NIVEL VAZIO");
+    }
     setNivel1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF);
   }
 }
