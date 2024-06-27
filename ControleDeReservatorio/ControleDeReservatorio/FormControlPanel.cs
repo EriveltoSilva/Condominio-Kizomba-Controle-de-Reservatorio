@@ -13,11 +13,11 @@ using System.Media;
 namespace ControleDeReservatorio
 {
 
-    public partial class Form1 : Form
+    public partial class FormControlPanel : Form
     {
         private bool flagMute = false;
 
-        public Form1()
+        public FormControlPanel()
         {
             InitializeComponent();
             initSerial();

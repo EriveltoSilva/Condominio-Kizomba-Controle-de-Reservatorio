@@ -13,6 +13,7 @@ C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\Cont
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\bin\Debug\ControleDeReservatorio.exe
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\bin\Debug\ControleDeReservatorio.pdb
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.csprojResolveAssemblyReference.cache
-C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.Form1.resources
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.Properties.Resources.resources
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.csproj.GenerateResource.Cache
+C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormControlPanel.resources
+C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormLogin.resources
