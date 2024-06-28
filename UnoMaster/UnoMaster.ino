@@ -14,35 +14,37 @@
  *** 9- WATER LEVEL SENSORS (20)
  *** 10-LCD WITH I2C (2)
  ***
+ // Enviar Mensagem quando: 0, 10, 30, 40, 
 */
 ////////////////////// Definições /////////////////////
 //#define DEBUG false
+#define NOME "RW"
 #define R1_NOME "RW1"
 #define R2_NOME "RW2"
 #define DEBUG false    // Se tiver tudo OK, usa-me
 //#define DEBUG true   // Se tiver bug, usa-me
 
 
-
 #define LED_ON HIGH
 #define LED_OFF LOW
 #define ZERO "0%"
 #define VAZIO "VAZIO"
+#define STATUS_VAZIO "0"
 ///////////////////////////////////////////////////////
 
 ////////// Definição de Pinos e Objectos /////////////
 #define LED 13
 
-#define R1_SENSOR_NIVEL1 22
-#define R1_SENSOR_NIVEL2 23
-#define R1_SENSOR_NIVEL3 24
-#define R1_SENSOR_NIVEL4 25
-#define R1_SENSOR_NIVEL5 26
-#define R1_SENSOR_NIVEL6 27
-#define R1_SENSOR_NIVEL7 28
-#define R1_SENSOR_NIVEL8 29
-#define R1_SENSOR_NIVEL9 30
-#define R1_SENSOR_NIVEL10 31
+#define R1_SENSOR_NIVEL10 22
+#define R1_SENSOR_NIVEL9 23
+#define R1_SENSOR_NIVEL8 24
+#define R1_SENSOR_NIVEL7 25
+#define R1_SENSOR_NIVEL6 26
+#define R1_SENSOR_NIVEL5 27
+#define R1_SENSOR_NIVEL4 28
+#define R1_SENSOR_NIVEL3 29
+#define R1_SENSOR_NIVEL2 30
+#define R1_SENSOR_NIVEL1 31
 
 #define R1_LED_VERDE1 2
 #define R1_LED_VERDE2 3
@@ -58,16 +60,16 @@
 #define R1_BUZZER 52
 
 
-#define R2_SENSOR_NIVEL1 32
-#define R2_SENSOR_NIVEL2 33
-#define R2_SENSOR_NIVEL3 34
-#define R2_SENSOR_NIVEL4 35
-#define R2_SENSOR_NIVEL5 36
-#define R2_SENSOR_NIVEL6 37
-#define R2_SENSOR_NIVEL7 38
-#define R2_SENSOR_NIVEL8 39
-#define R2_SENSOR_NIVEL9 40
-#define R2_SENSOR_NIVEL10 41
+#define R2_SENSOR_NIVEL10 32
+#define R2_SENSOR_NIVEL9 33
+#define R2_SENSOR_NIVEL8 34
+#define R2_SENSOR_NIVEL7 35
+#define R2_SENSOR_NIVEL6 36
+#define R2_SENSOR_NIVEL5 37
+#define R2_SENSOR_NIVEL4 38
+#define R2_SENSOR_NIVEL3 39
+#define R2_SENSOR_NIVEL2 40
+#define R2_SENSOR_NIVEL1 41
 
 #define R2_LED_VERDE1 42
 #define R2_LED_VERDE2 43
@@ -82,10 +84,16 @@
 
 #define R2_BUZZER 53
 
+
+#define SerialRQ Serial1
+#define SerialRF Serial3
+#define gsm      Serial2
+
+
 //////////////////////////////////////////////////
 
 ///////////// Inclusão de Bibliotecas /////////////
-#include <avr/wdt.h>
+//#include <avr/wdt.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 //////////////////////////////////////////////////
@@ -96,18 +104,21 @@ LiquidCrystal_I2C lcd1(0x27, 16, 2);  // set the LCD address to 0x27 for a 16X02
 LiquidCrystal_I2C lcd2(0x23, 16, 2);  // set the LCD address to 0x26 for a 16X02
 ///////////////////////////////////////////////////
 
+byte numReservatorio=1;
 byte cont = 0;
 bool flag = false;
 
 unsigned long int temporizador = 0;
 String leituraReservatorio1 = ZERO;  /////
 String nivelReservatorio1 = VAZIO;   /////
+String status1 = STATUS_VAZIO;       /////
 
 String leituraReservatorio2 = ZERO;  /////
 String nivelReservatorio2 = VAZIO;   /////
+String status2 = STATUS_VAZIO;       /////
 
-void setup() {
-
+void setup() 
+{
   // --------- DEFINIÇÃO DOS PINOS DOS SENSORES DO  RESERVATORIO 1 ---------------------
   pinMode(R1_SENSOR_NIVEL1, INPUT_PULLUP);
   pinMode(R1_SENSOR_NIVEL2, INPUT_PULLUP);
@@ -226,22 +237,26 @@ void setup() {
 
   Serial.begin(9600);
   delay(1000);
+  //Serial1.begin(9600); // SERIAL PARA O RQ
+  Serial3.begin(9600); // SERIAL PARA O RF
   Serial2.begin(9600); // SERIAL PARA O GSM
   delay(1000);
   Serial.println("SISTEMA INICIADO COM SUCESSO!");
 
-  wdt_enable(WDTO_8S);
+  //wdt_enable(WDTO_8S);
 }
 
 
 void loop() {
-  wdt_reset();
+  //wdt_reset();
+  receberDados();
   
-  if ((millis() - temporizador) > 500) {
+  if ((millis() - temporizador) > 1000) {
     temporizador = millis();
     lerSensores1();
     lerSensores2();
-    enviarDados();
+    pedirDados();
+    //enviarDados();
     if(++cont==2)
     {
       cont =0;
@@ -252,17 +267,21 @@ void loop() {
     digitalWrite(LED, !digitalRead(LED));
   }
 
-  delay(50);
+  delay(5);
 }
 
 
 //////////////////////////////////////////////////////////
 void enviarDados() {
-  String texto = "R*";
-  texto += nivelReservatorio1 + "*" + leituraReservatorio1 + "*";
-  texto += nivelReservatorio2 + "*" + leituraReservatorio2 + "*";
+  String texto = String(NOME) + "*";
+  texto += status1 + "*" + status2 + "*";
   Serial.println(texto);
-  Serial2.println(texto);
+  Serial3.println(texto);
+}
+
+//////////////////////////////////////////////////////////
+void enviarParaComputador(String dados) {
+  Serial.println(dados);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -330,65 +349,6 @@ void setNivelReservatorio2(bool nivel1, bool nivel2, bool nivel3, bool nivel4, b
   digitalWrite(R2_LED_VERMELHO1, nivel10);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-void MedioMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 a 50%, Nivel ao Meio");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-void CriticoMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 a 30%, Nivel Critico");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-void SuperCriticoMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 a 10%, Nivel Super Critico");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-void VazioMessage() {
-  Serial2.println("AT+CMGF=1");
-  delay(1000);
-
-  Serial2.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  Serial2.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  Serial2.println("Tanque FW1 Vazio");
-  delay(100);
-  Serial2.println((char)26);
-  delay(1000);
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void lerSensores1() {
@@ -406,118 +366,125 @@ void lerSensores1() {
   if(DEBUG)
   {
     Serial.println("===========================================");
-    Serial.println(String(R1_NOME)+"_SENSOR1:"+String(sensor1));
-    Serial.println(String(R1_NOME)+"_SENSOR2:"+String(sensor2));
-    Serial.println(String(R1_NOME)+"_SENSOR3:"+String(sensor3));
-    Serial.println(String(R1_NOME)+"_SENSOR4:"+String(sensor4));
-    Serial.println(String(R1_NOME)+"_SENSOR5:"+String(sensor5));
-    Serial.println(String(R1_NOME)+"_SENSOR6:"+String(sensor6));
-    Serial.println(String(R1_NOME)+"_SENSOR7:"+String(sensor7));
-    Serial.println(String(R1_NOME)+"_SENSOR8:"+String(sensor8));
-    Serial.println(String(R1_NOME)+"_SENSOR9:"+String(sensor9));
     Serial.println(String(R1_NOME)+"_SENSOR10:"+String(sensor10));
+    Serial.println(String(R1_NOME)+"_SENSOR9:"+String(sensor9));
+    Serial.println(String(R1_NOME)+"_SENSOR8:"+String(sensor8));
+    Serial.println(String(R1_NOME)+"_SENSOR7:"+String(sensor7));
+    Serial.println(String(R1_NOME)+"_SENSOR6:"+String(sensor6));
+    Serial.println(String(R1_NOME)+"_SENSOR5:"+String(sensor5));
+    Serial.println(String(R1_NOME)+"_SENSOR4:"+String(sensor4));
+    Serial.println(String(R1_NOME)+"_SENSOR3:"+String(sensor3));
+    Serial.println(String(R1_NOME)+"_SENSOR2:"+String(sensor2));
+    Serial.println(String(R1_NOME)+"_SENSOR1:"+String(sensor1));
     Serial.println("===========================================");
   }
 
   // Primeiro Nivel - 100% - 4,5 m^2 - todos os leds acesso
-  if ((sensor1 == 1) && (sensor2 == 1) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
-      && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  if ((sensor10 == 1) && (sensor9 == 1) && (sensor8 == 1) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "CHEIO";
     leituraReservatorio1 = "100%";
+    status1="10";
     setNivelReservatorio1(LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
     desligarAlarme1();
   }
 
   // Segundo Nivel - 90% - 4,05 m^2 - um led apagado
-  else if ((sensor1 == 0) && (sensor2 == 1) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 1) && (sensor8 == 1) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "QUASE CHEIO";
     leituraReservatorio1 = "90%";
+    status1="9";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // terceiro Nivel - 80% - 3,6 m^2 - dois leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 1) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "MUITO ALTO";
     leituraReservatorio1 = "80%";
+    status1="8";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // Quarto Nivel - 70% - 3,15 m^2 - três leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 1) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "ALTO";
     leituraReservatorio1 = "70%";
+    status1="7";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // Quinto Nivel - 60% - 2,7 m^2 - quatro leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 ==0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "MEDIO ALTO";
     leituraReservatorio1 = "60%";
+    status1="6";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // sexto Nivel - 50% - 2,25 m^2 - cinco leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "MEDIO";
     leituraReservatorio1 = "50%";
+    status1="5";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // setimo Nivel - 40% - 1,8 m^2 - seis leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "MEDIO BAIXO";
     leituraReservatorio1 = "40%";
-    MedioMessage();
+    status1="4";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // Oitavo Nivel - 30% - 1,35 m^2 - sete leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "BAIXO";
     leituraReservatorio1 = "30%";
-    CriticoMessage();
+    status1="3";
     desligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON);
   }
 
   // Nono Nivel - 20% - 0,9 m^2 - oito leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 0) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio1 = "QUASE VAZIO";
     leituraReservatorio1 = "20%";
+    status1="2";
     ligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON);
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 0) && (sensor9 == 0) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 1)) {
     nivelReservatorio1 = "CRITICO";
     leituraReservatorio1 = "10%";
-    SuperCriticoMessage();
+    status1="1";
     ligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON);
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 0) && (sensor9 == 0) && (sensor10 == 0)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 1) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 0)) {
     nivelReservatorio1 = "VAZIO";
     leituraReservatorio1 = "0%";
-    VazioMessage();
+    status1="0";
     ligarAlarme1();
     setNivelReservatorio1(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF);
   }
@@ -539,120 +506,235 @@ void lerSensores2() {
   if(DEBUG)
   {
     Serial.println("===========================================");
-    Serial.println(String(R2_NOME)+"_SENSOR1:"+String(sensor1));
-    Serial.println(String(R2_NOME)+"_SENSOR2:"+String(sensor2));
-    Serial.println(String(R2_NOME)+"_SENSOR3:"+String(sensor3));
-    Serial.println(String(R2_NOME)+"_SENSOR4:"+String(sensor4));
-    Serial.println(String(R2_NOME)+"_SENSOR5:"+String(sensor5));
-    Serial.println(String(R2_NOME)+"_SENSOR6:"+String(sensor6));
-    Serial.println(String(R2_NOME)+"_SENSOR7:"+String(sensor7));
-    Serial.println(String(R2_NOME)+"_SENSOR8:"+String(sensor8));
-    Serial.println(String(R2_NOME)+"_SENSOR9:"+String(sensor9));
     Serial.println(String(R2_NOME)+"_SENSOR10:"+String(sensor10));
+    Serial.println(String(R2_NOME)+"_SENSOR9:"+String(sensor9));
+    Serial.println(String(R2_NOME)+"_SENSOR8:"+String(sensor8));
+    Serial.println(String(R2_NOME)+"_SENSOR7:"+String(sensor7));
+    Serial.println(String(R2_NOME)+"_SENSOR6:"+String(sensor6));
+    Serial.println(String(R2_NOME)+"_SENSOR5:"+String(sensor5));
+    Serial.println(String(R2_NOME)+"_SENSOR4:"+String(sensor4));
+    Serial.println(String(R2_NOME)+"_SENSOR3:"+String(sensor3));
+    Serial.println(String(R2_NOME)+"_SENSOR2:"+String(sensor2));
+    Serial.println(String(R2_NOME)+"_SENSOR1:"+String(sensor1));
     Serial.println("===========================================");
   }
 
   // Primeiro Nivel - 100% - 4,5 m^2 - todos os leds acesso
-  if ((sensor1 == 1) && (sensor2 == 1) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
-      && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  if ((sensor10 == 1) && (sensor9 == 1) && (sensor8 == 1) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "CHEIO";
     leituraReservatorio2 = "100%";
+    status2 = "10";
     setNivelReservatorio2(LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
     desligarAlarme2();
   }
 
   // Segundo Nivel - 90% - 4,05 m^2 - um led apagado
-  else if ((sensor1 == 0) && (sensor2 == 1) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 1) && (sensor8 == 1) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "QUASE CHEIO";
     leituraReservatorio2 = "90%";
+    status2 = "9";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // terceiro Nivel - 80% - 3,6 m^2 - dois leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 1) && (sensor4 == 1) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 1) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "MUITO ALTO";
     leituraReservatorio2 = "80%";
+    status2 = "8";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // Quarto Nivel - 70% - 3,15 m^2 - três leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 1) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 1) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "ALTO";
     leituraReservatorio2 = "70%";
+    status2 = "7";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // Quinto Nivel - 60% - 2,7 m^2 - quatro leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 1)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 1)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "MEDIO ALTO";
     leituraReservatorio2 = "60%";
+    status2 = "6";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // sexto Nivel - 50% - 2,25 m^2 - cinco leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 1) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 1) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "MEDIO";
     leituraReservatorio2 = "50%";
+    status2 = "5";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // setimo Nivel - 40% - 1,8 m^2 - seis leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 1) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 1) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "MEDIO BAIXO";
     leituraReservatorio2 = "40%";
-    // MedioMessage();
+    status2 = "4";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON, LED_ON);
   }
 
   // Oitavo Nivel - 30% - 1,35 m^2 - sete leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 1) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 1) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "BAIXO";
     leituraReservatorio2 = "30%";
-    // CriticoMessage();
+    status2 = "3";
     desligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON, LED_ON);
   }
 
   // Nono Nivel - 20% - 0,9 m^2 - oito leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 0) && (sensor9 == 1) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 1) && (sensor1 == 1)) {
     nivelReservatorio2 = "QUASE VAZIO";
     leituraReservatorio2 = "20%";
+    status2 = "2";
     ligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON, LED_ON);
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 0) && (sensor9 == 0) && (sensor10 == 1)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 1)) {
     nivelReservatorio2 = "CRITICO";
     leituraReservatorio2 = "10%";
-    // SuperCriticoMessage();
+    status2 = "1";
     ligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_ON);
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
-  else if ((sensor1 == 0) && (sensor2 == 0) && (sensor3 == 0) && (sensor4 == 0) && (sensor5 == 0)
-           && (sensor6 == 0) && (sensor7 == 0) && (sensor8 == 0) && (sensor9 == 0) && (sensor10 == 0)) {
+  else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 1)) {
     Serial.println("Nivel 0%");
     nivelReservatorio2 = "VAZIO";
     leituraReservatorio2 = "0%";
-    // VazioMessage();
+    status2 = "0";
     ligarAlarme2();
     setNivelReservatorio2(LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF, LED_OFF);
   }
 }
+
+void receberDados() {
+  //-------------------Serial do COntrolador em Questão--------------------------
+  if (Serial1.available()) {
+    while (Serial1.available()) {
+      String rx = Serial1.readString();
+      if (rx.startsWith("RQ")){
+        delay(4);
+        if (rx.indexOf("RET") > 0) {
+          Serial.println("### REENVIANDO p/:"+String(rx));
+          enviarParaComputador(rx);
+        }
+      }
+    }
+  }
+
+  if (Serial3.available()) {
+    while (Serial3.available()) {
+      String rx = Serial3.readString();
+      Serial.println("CHEGOU:"+rx);
+      if (rx.startsWith("RF")) {
+        delay(4);
+        if (rx.indexOf("RET") > 0) {
+          Serial.println("### REENVIANDO p/:"+String(rx));
+          enviarParaComputador(rx);
+        }
+      }
+    }
+  }
+}
+
+
+//////////////////////////////////////////////////////////
+void pedirDados() {
+  if(numReservatorio<3)
+  {
+    if(numReservatorio==1)
+      Serial3.println("RF1-RET");
+    else if(numReservatorio==2)
+      Serial1.println("RQ1-RET");
+  }
+  if(++numReservatorio>2)numReservatorio=1;
+}
+
+
+/*
+
+///////////////////////////////////////////////////////////////////////////////////
+void MedioMessage() {
+  gsm.println("AT+CMGF=1");
+  delay(1000);
+
+  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+  delay(1000);
+
+  gsm.println("Tanque FW1 a 50%, Nivel ao Meio");
+  delay(100);
+  gsm.println((char)26);
+  delay(1000);
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+void CriticoMessage() {
+  gsm.println("AT+CMGF=1");
+  delay(1000);
+
+  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+  delay(1000);
+
+  gsm.println("Tanque FW1 a 30%, Nivel Critico");
+  delay(100);
+  gsm.println((char)26);
+  delay(1000);
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+void SuperCriticoMessage() {
+  gsm.println("AT+CMGF=1");
+  delay(1000);
+
+  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+  delay(1000);
+
+  gsm.println("Tanque FW1 a 10%, Nivel Super Critico");
+  delay(100);
+  gsm.println((char)26);
+  delay(1000);
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+void VazioMessage() {
+  gsm.println("AT+CMGF=1");
+  delay(1000);
+
+  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
+  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
+  delay(1000);
+
+  gsm.println("Tanque FW1 Vazio");
+  delay(100);
+  gsm.println((char)26);
+  delay(1000);
+}
+
+*/

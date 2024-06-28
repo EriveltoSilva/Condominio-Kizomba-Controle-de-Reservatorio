@@ -18,8 +18,9 @@
 */
 ////////////////////// Definições /////////////////////
 //#define DEBUG false
-#define R1_NOME "RW1"
-#define R2_NOME "RW2"
+#define NOME "RQ"
+#define R1_NOME "RQ1"
+#define R2_NOME "RQ2"
 #define DEBUG false    // Se tiver tudo OK, usa-me
 //#define DEBUG true   // Se tiver bug, usa-me
 
@@ -87,7 +88,7 @@
 //////////////////////////////////////////////////
 
 ///////////// Inclusão de Bibliotecas /////////////
-#include <avr/wdt.h>
+//#include <avr/wdt.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 //////////////////////////////////////////////////
@@ -230,16 +231,16 @@ void setup()
 
   Serial.begin(9600);
   delay(1000);
-  Serial2.begin(9600); // SERIAL PARA O GSM
+  Serial3.begin(9600); // SERIAL PARA O MASTER
   delay(1000);
   Serial.println("SISTEMA INICIADO COM SUCESSO!");
 
-  wdt_enable(WDTO_8S);
+  //wdt_enable(WDTO_8S);
 }
 
 
 void loop() {
-  wdt_reset();
+  //wdt_reset();
   receberDados();
   
   if ((millis() - temporizador) > 1000) {
@@ -257,16 +258,16 @@ void loop() {
     digitalWrite(LED, !digitalRead(LED));
   }
 
-  delay(50);
+  delay(5);
 }
 
 
 //////////////////////////////////////////////////////////
 void enviarDados() {
-  String texto = "R*";
+  String texto = String(NOME) + "*";
   texto += status1 + "*" + status2 + "*";
   Serial.println(texto);
-  Serial2.println(texto);
+  Serial3.println(texto);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -618,13 +619,14 @@ void lerSensores2() {
 
 void receberDados() {
   //-------------------Serial do COntrolador em Questão--------------------------
-  if (Serial2.available()) {
-    while (Serial2.available()) {
-      String rx = Serial2.readString();
+  if (Serial3.available()) {
+    while (Serial3.available()) {
+      String rx = Serial3.readString();
+      Serial.print("CHEGOU:"+rx);
       if (rx.startsWith(R1_NOME) || rx.startsWith(R2_NOME)) {
         delay(4);
         if (rx.indexOf("RET") > 0) {
-          Serial.print("### REENVIANDO ###");
+          Serial.println("### REENVIANDO p/:"+String(rx));
           enviarDados();
         }
       }
