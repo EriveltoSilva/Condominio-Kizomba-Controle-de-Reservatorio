@@ -21,8 +21,8 @@
 #define NOME "RW"
 #define R1_NOME "RW1"
 #define R2_NOME "RW2"
-#define DEBUG false    // Se tiver tudo OK, usa-me
-//#define DEBUG true   // Se tiver bug, usa-me
+//#define DEBUG false    // Se tiver tudo OK, usa-me
+#define DEBUG true   // Se tiver bug, usa-me
 
 
 

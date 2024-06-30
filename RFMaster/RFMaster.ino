@@ -65,9 +65,9 @@
 #define R2_BUZZER 53
 
 
-#define SerialRW Serial1
+#define SerialRW Serial2
 #define SerialWW Serial3
-#define gsm      Serial2
+#define gsm      Serial1
 //////////////////////////////////////////////////
 
 ///////////// Inclusão de Bibliotecas /////////////
@@ -165,8 +165,8 @@ void setup()
 
   Serial.begin(9600);
   delay(1000);
-  //Serial1.begin(9600); // SERIAL PARA O RW
-  Serial2.begin(9600); // SERIAL PARA O GSM
+  Serial1.begin(9600); // SERIAL PARA O GSM
+  Serial2.begin(9600); // SERIAL PARA O RW
   Serial3.begin(9600); // SERIAL PARA O WW
   delay(1000);
   Serial.println("SISTEMA INICIADO COM SUCESSO!");
@@ -185,7 +185,7 @@ void loop() {
     lerSensores1();
     lerSensores2();
     pedirDados();
-    
+    enviarDados();
     if(++cont==2)
     {
       cont =0;
@@ -225,7 +225,7 @@ void enviarDados() {
   String texto = String(NOME) + "*";
   texto += status1 + "*" + status2 + "*";
   Serial.println(texto);
-  Serial3.println(texto);
+  //Serial3.println(texto);
 }
 
 //////////////////////////////////////////////////////////
@@ -596,17 +596,16 @@ void lerSensores2() {
 
 void receberDados() {
   //-------------------Serial do COntrolador em Questão--------------------------
-  //SerialRW Serial1
+  //SerialRW Serial2
   //SerialWW Serial3
-  if (Serial1.available()) {
-    while (Serial1.available()) {
-      String rx = Serial1.readString();
+  if (Serial2.available()) {
+    while (Serial2.available()) {
+      String rx = Serial2.readString();
       if (rx.startsWith("RW")){
+        //Serial.println("CHEGOU RW:"+rx);
         delay(4);
-        if (rx.indexOf("RET") > 0) {
-          Serial.println("### REENVIANDO p/:"+String(rx));
-          enviarParaComputador(rx);
-        }
+        //Serial.println("### REENVIANDO p/ PC DE:RW");
+        enviarParaComputador(rx);
       }
     }
   }
@@ -614,13 +613,11 @@ void receberDados() {
   if (Serial3.available()) {
     while (Serial3.available()) {
       String rx = Serial3.readString();
-      Serial.println("CHEGOU:"+rx);
       if (rx.startsWith("WW")) {
+        //Serial.println("CHEGOU WW:"+rx);
         delay(4);
-        if (rx.indexOf("RET") > 0) {
-          Serial.println("### REENVIANDO p/:"+String(rx));
-          enviarParaComputador(rx);
-        }
+        //Serial.println("### REENVIANDO: P/ PC DE:WW");
+        enviarParaComputador(rx);
       }
     }
   }
@@ -635,7 +632,7 @@ void pedirDados()
     if(numReservatorio==1)
       Serial3.println("WW1-RET");
     else if(numReservatorio==2)
-      Serial1.println("RW1-RET");
+      Serial2.println("RW1-RET");
   }
   if(++numReservatorio>2)numReservatorio=1;
 }
@@ -643,13 +640,13 @@ void pedirDados()
 void sendSMS(const String number, String sms)
 {
   Serial.print("SMS: "); Serial.println(sms);
-  Serial2.println("AT+CMGF=1");
+  gsm.println("AT+CMGF=1");
   delay(1000);  comunication();
-  Serial2.println("AT+CMGS=\"" + number + "\"\r");
+  gsm.println("AT+CMGS=\"" + number + "\"\r");
   delay(1000);  comunication();
-  Serial2.println(sms);
+  gsm.println(sms);
   delay(100);
-  Serial2.println((char)26);
+  gsm.println((char)26);
   delay(1000);  comunication();
   delay(4000);
   Serial.println("\n################ SMS SENT! #################");
@@ -660,9 +657,8 @@ void comunication()
 {
   if (Serial.available())
     while (Serial.available())
-      Serial2.write(Serial.read());
+      gsm.write(Serial.read());
 
-  if (Serial2.available())
-    while (Serial2.available())
-      Serial.write(Serial2.read());
+    while (gsm.available())
+      Serial.write(gsm.read());
 }
