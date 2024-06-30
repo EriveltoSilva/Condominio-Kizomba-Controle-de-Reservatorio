@@ -17,11 +17,32 @@ namespace ControleDeReservatorio
     public partial class FormControlPanel : Form
     {
         private bool flagMute = false;
+        private FormMonitoring formMonitoringRF;
+        private FormMonitoring formMonitoringRW;
+        private FormMonitoring formMonitoringWW;
 
         public FormControlPanel()
         {
             InitializeComponent();
             initSerial();
+            lbl_login_date.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            pnl_nav.Height = btnMenuRF.Height;
+            pnl_nav.Top = btnMenuRF.Top;
+            pnl_nav.Left = btnMenuRF.Left;
+            btnMenuRF.BackColor = Color.FromArgb(46, 51, 73);
+
+            formMonitoringRF = new FormMonitoring("CONTROLE DO RF1 & RF2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRF.FormBorderStyle = FormBorderStyle.None;
+
+            formMonitoringRW = new FormMonitoring("CONTROLE DO RW1 & RW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRW.FormBorderStyle = FormBorderStyle.None;
+
+            formMonitoringWW = new FormMonitoring("CONTROLE DO WW1 & WW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringWW.FormBorderStyle = FormBorderStyle.None;
+
+            this.pnl_form_loader.Controls.Clear();
+            this.pnl_form_loader.Controls.Add(formMonitoringRF);
+            formMonitoringRF.Show();
         }
 
         public FormControlPanel(UserModel user)
@@ -29,6 +50,24 @@ namespace ControleDeReservatorio
             InitializeComponent();
             initSerial();
             lbl_username.Text = user.getUsername();
+            lbl_login_date.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            pnl_nav.Height = btnMenuRF.Height;
+            pnl_nav.Top = btnMenuRF.Top;
+            pnl_nav.Left = btnMenuRF.Left;
+            btnMenuRF.BackColor = Color.FromArgb(46, 51, 73);
+        
+            formMonitoringRF = new FormMonitoring("CONTROLE DO RF1 & RF2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRF.FormBorderStyle = FormBorderStyle.None;
+
+            formMonitoringRW = new FormMonitoring("CONTROLE DO RW1 & RW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRW.FormBorderStyle = FormBorderStyle.None;
+
+            formMonitoringWW = new FormMonitoring("CONTROLE DO WW1 & WW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringWW.FormBorderStyle = FormBorderStyle.None;
+
+            this.pnl_form_loader.Controls.Clear();
+            this.pnl_form_loader.Controls.Add(formMonitoringRF);
+            formMonitoringRF.Show();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -36,13 +75,6 @@ namespace ControleDeReservatorio
             closeCOMPort();
             Application.Exit();
         }
-
-        /*private void btn_menu_ir_login_Click(object sender, EventArgs e)
-        {
-            fecharPortaCom();
-            Hide();
-            new FormularioLogin().Show();
-        }*/
 
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -139,76 +171,99 @@ namespace ControleDeReservatorio
                 SystemSounds.Beep.Play();
         }
 
-        private void setImage(int numReserve, String nivel)
-        {
-            // 100-CHEIO, 90-QUASE CHEIO, 80-MUITO ALTO, 70-ALTO, 60-MEDIO ALTO, 50-MEDIO , 40-MEDIO BAIXO , 30-BAIXO , 20-QUASE VAZIO , 10-CRITICO , 0-VAZIO
-            String path = "";
-            if (nivel == "VAZIO") path = "0";
-            else if (nivel == "CRITICO") path = "10";
-            else if (nivel == "QUASE VAZIO") path = "20";
-            else if (nivel == "BAIXO") path = "30";
-            else if (nivel == "MEDIO BAIXO") path = "30";
-            else if (nivel == "MEDIO") path = "50";
-            else if (nivel == "MEDIO ALTO") path = "50";
-            else if (nivel == "ALTO") path = "70";
-            else if (nivel == "MUITO ALTO") path = "80";
-            else if (nivel == "QUASE CHEIO") path = "80";
-            else if (nivel == "CHEIO") path = "100";
-
-            if (numReserve==1)
-                imageReserve1.Load("../../Resources/reservatorio" + path+ ".png");
-            else
-                imageReserve2.Load("../../Resources/reservatorio" + path + ".png");
-        }
+        
 
         private void receiveDataFromArduino(object sender, EventArgs e)
         {
             // 0-R, 1-nivelReservatorio1, 2- leituraReservatorio1, 3-nivelReservatorio2, 4- leituraReservatorio2,
             String[] dados = serialPort1.ReadLine().Split('*');
-            if (dados.Length == 6)
-            {
-                if (dados[0] == "R")
-                {
-                    lblWaterLevel1.Text = dados[1];
-                    lblWaterReading1.Text = dados[2];
-
-                    lblWaterLevel2.Text = dados[3];
-                    lblWaterReading2.Text = dados[4];
-
-                    if (dados[1] == "VAZIO" || dados[1]== "CRITICO" || dados[1] == "QUASE VAZIO")
-                    {
-                        lblWaterLevel1.ForeColor = Color.FromArgb(220, 53, 69);     // VERMELHO danger
-                        lblWaterReading1.ForeColor = Color.FromArgb(220, 53, 69);   // VERMELHO danger
-                        turnOnAlarme();
-                    }
-                    else
-                    {
-                        lblWaterLevel1.ForeColor = Color.FromArgb(0, 126, 249);     
-                        lblWaterReading1.ForeColor = Color.FromArgb(0, 126, 249);   
-                    }
-
-
-                    if (dados[3] == "VAZIO" || dados[3] == "CRITICO" || dados[3] == "QUASE VAZIO")
-                    {
-                        lblWaterLevel2.ForeColor = Color.FromArgb(220, 53, 69);   
-                        lblWaterReading2.ForeColor = Color.FromArgb(220, 53, 69); 
-                        turnOnAlarme();
-                    }
-                    else
-                    {
-                        lblWaterLevel2.ForeColor = Color.FromArgb(0, 126, 249);     // verde success
-                        lblWaterReading2.ForeColor = Color.FromArgb(0, 126, 249);   // verde success
-                    }
-
-                    setImage(1, dados[1]);
-                    setImage(2, dados[3]);
-                }
-            }
+            if(dados[0]=="RF" && formMonitoringRF != null)
+                formMonitoringRF.setData(dados);
+            else if(dados[0] == "RW" && formMonitoringRW != null)
+                formMonitoringRW.setData(dados);
+            else if (dados[0] == "WW" && formMonitoringWW != null)
+                formMonitoringWW.setData(dados);
         }
+
+        private void cleanAllBackground()
+        {
+            btnMenuRF.BackColor = Color.FromArgb(24, 30, 54);
+            btnMenuRW.BackColor = Color.FromArgb(24, 30, 54);
+            btnMenuWW.BackColor = Color.FromArgb(24, 30, 54);
+
+        }
+
 
         private void lblWaterReading1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void hideFields()
+        {
+            this.pnl_form_loader.Controls.Clear();
+            formMonitoringRF.Hide();
+            formMonitoringRW.Hide();
+            formMonitoringWW.Hide();
+        }
+        private void btnMenuRF_Click(object sender, EventArgs e)
+        {
+            cleanAllBackground();
+            pnl_nav.Height = btnMenuRF.Height;
+            pnl_nav.Top = btnMenuRF.Top;
+            pnl_nav.Left = btnMenuRF.Left;
+            btnMenuRF.BackColor = Color.FromArgb(46, 51, 73);
+           
+            hideFields();
+            this.pnl_form_loader.Controls.Add(formMonitoringRF);
+            formMonitoringRF.Show();
+        }
+
+        private void btnMenuRW_Click(object sender, EventArgs e)
+        {
+            cleanAllBackground();
+            pnl_nav.Height = btnMenuRW.Height;
+            pnl_nav.Top = btnMenuRW.Top;
+            pnl_nav.Left = btnMenuRW.Left;
+            btnMenuRW.BackColor = Color.FromArgb(46, 51, 73);
+            
+            hideFields();
+            this.pnl_form_loader.Controls.Add(formMonitoringRW);
+            formMonitoringRW.Show();
+        }
+
+        private void bntMenuWW_Click(object sender, EventArgs e)
+        {
+            cleanAllBackground();
+            pnl_nav.Height = btnMenuWW.Height;
+            pnl_nav.Top = btnMenuWW.Top;
+            pnl_nav.Left = btnMenuWW.Left;
+            btnMenuWW.BackColor = Color.FromArgb(46, 51, 73);
+
+            hideFields();
+            this.pnl_form_loader.Controls.Add(formMonitoringWW);
+            formMonitoringWW.Show();
+        }
+
+        private void btnMenuRF_Leave(object sender, EventArgs e)
+        {
+            btnMenuRF.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void btnMenuRW_Leave(object sender, EventArgs e)
+        {
+            btnMenuRW.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void btnMenuWW_Leave(object sender, EventArgs e)
+        {
+            btnMenuWW.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void btnExit_Click_1(object sender, EventArgs e)
+        {
+            closeCOMPort();
+            Application.Exit();
         }
     }
 }

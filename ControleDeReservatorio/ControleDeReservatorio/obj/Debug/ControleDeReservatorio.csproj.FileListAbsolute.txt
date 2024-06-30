@@ -17,3 +17,4 @@ C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\Cont
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.csproj.GenerateResource.Cache
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormControlPanel.resources
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormLogin.resources
+C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormMonitoring.resources
