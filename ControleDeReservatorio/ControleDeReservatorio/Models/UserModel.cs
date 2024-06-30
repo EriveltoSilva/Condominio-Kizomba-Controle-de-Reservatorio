@@ -82,7 +82,7 @@ namespace ControleDeReservatorio.Models
             return this.password;
         }
 
-        public String getPsswordAdmin()
+        public String getPasswordAdmin()
         {
             return this.passwordAdmin;
         }
@@ -98,3 +98,4 @@ namespace ControleDeReservatorio.Models
         }
     }
 }
+

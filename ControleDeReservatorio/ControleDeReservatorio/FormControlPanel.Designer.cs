@@ -31,9 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelMenu = new System.Windows.Forms.Panel();
-            this.btnMenuWW = new System.Windows.Forms.Button();
-            this.btnMenuRW = new System.Windows.Forms.Button();
-            this.btnMenuRF = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.cbBaudRate = new System.Windows.Forms.ComboBox();
             this.btnUpdateSerialPorts = new System.Windows.Forms.Button();
@@ -48,12 +45,18 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.lbl_login_date = new System.Windows.Forms.Label();
             this.lbl_username = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pnl_form_loader = new System.Windows.Forms.Panel();
+            this.btnRegiterUser = new System.Windows.Forms.Button();
+            this.btnMenuWW = new System.Windows.Forms.Button();
+            this.btnMenuRW = new System.Windows.Forms.Button();
+            this.btnMenuRF = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.panelMenu.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -63,6 +66,7 @@
             // panelMenu
             // 
             this.panelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panelMenu.Controls.Add(this.btnRegiterUser);
             this.panelMenu.Controls.Add(this.btnMenuWW);
             this.panelMenu.Controls.Add(this.btnMenuRW);
             this.panelMenu.Controls.Add(this.btnMenuRF);
@@ -75,63 +79,6 @@
             this.panelMenu.Name = "panelMenu";
             this.panelMenu.Size = new System.Drawing.Size(307, 898);
             this.panelMenu.TabIndex = 0;
-            // 
-            // btnMenuWW
-            // 
-            this.btnMenuWW.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMenuWW.FlatAppearance.BorderSize = 0;
-            this.btnMenuWW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuWW.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuWW.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
-            this.btnMenuWW.Image = global::ControleDeReservatorio.Properties.Resources.home;
-            this.btnMenuWW.Location = new System.Drawing.Point(0, 448);
-            this.btnMenuWW.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnMenuWW.Name = "btnMenuWW";
-            this.btnMenuWW.Size = new System.Drawing.Size(307, 74);
-            this.btnMenuWW.TabIndex = 4;
-            this.btnMenuWW.Text = "Painel WW";
-            this.btnMenuWW.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnMenuWW.UseVisualStyleBackColor = true;
-            this.btnMenuWW.Click += new System.EventHandler(this.bntMenuWW_Click);
-            this.btnMenuWW.Leave += new System.EventHandler(this.btnMenuWW_Leave);
-            // 
-            // btnMenuRW
-            // 
-            this.btnMenuRW.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMenuRW.FlatAppearance.BorderSize = 0;
-            this.btnMenuRW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuRW.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuRW.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
-            this.btnMenuRW.Image = global::ControleDeReservatorio.Properties.Resources.home;
-            this.btnMenuRW.Location = new System.Drawing.Point(0, 374);
-            this.btnMenuRW.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnMenuRW.Name = "btnMenuRW";
-            this.btnMenuRW.Size = new System.Drawing.Size(307, 74);
-            this.btnMenuRW.TabIndex = 3;
-            this.btnMenuRW.Text = "Painel RW";
-            this.btnMenuRW.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnMenuRW.UseVisualStyleBackColor = true;
-            this.btnMenuRW.Click += new System.EventHandler(this.btnMenuRW_Click);
-            this.btnMenuRW.Leave += new System.EventHandler(this.btnMenuRW_Leave);
-            // 
-            // btnMenuRF
-            // 
-            this.btnMenuRF.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMenuRF.FlatAppearance.BorderSize = 0;
-            this.btnMenuRF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMenuRF.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMenuRF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
-            this.btnMenuRF.Image = global::ControleDeReservatorio.Properties.Resources.home;
-            this.btnMenuRF.Location = new System.Drawing.Point(0, 300);
-            this.btnMenuRF.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnMenuRF.Name = "btnMenuRF";
-            this.btnMenuRF.Size = new System.Drawing.Size(307, 74);
-            this.btnMenuRF.TabIndex = 2;
-            this.btnMenuRF.Text = "Painel RF";
-            this.btnMenuRF.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnMenuRF.UseVisualStyleBackColor = true;
-            this.btnMenuRF.Click += new System.EventHandler(this.btnMenuRF_Click);
-            this.btnMenuRF.Leave += new System.EventHandler(this.btnMenuRF_Leave);
             // 
             // panel3
             // 
@@ -307,6 +254,90 @@
             this.lbl_username.TabIndex = 1;
             this.lbl_username.Text = "Username";
             // 
+            // pnl_form_loader
+            // 
+            this.pnl_form_loader.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnl_form_loader.Location = new System.Drawing.Point(307, 0);
+            this.pnl_form_loader.Name = "pnl_form_loader";
+            this.pnl_form_loader.Size = new System.Drawing.Size(1471, 898);
+            this.pnl_form_loader.TabIndex = 1;
+            // 
+            // btnRegiterUser
+            // 
+            this.btnRegiterUser.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnRegiterUser.FlatAppearance.BorderSize = 0;
+            this.btnRegiterUser.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRegiterUser.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegiterUser.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
+            this.btnRegiterUser.Image = global::ControleDeReservatorio.Properties.Resources.Contact;
+            this.btnRegiterUser.Location = new System.Drawing.Point(0, 522);
+            this.btnRegiterUser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnRegiterUser.Name = "btnRegiterUser";
+            this.btnRegiterUser.Size = new System.Drawing.Size(307, 74);
+            this.btnRegiterUser.TabIndex = 5;
+            this.btnRegiterUser.Text = "Cadastrar Usuário";
+            this.btnRegiterUser.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnRegiterUser.UseVisualStyleBackColor = true;
+            this.btnRegiterUser.Visible = false;
+            this.btnRegiterUser.Click += new System.EventHandler(this.btnRegiterUser_Click);
+            // 
+            // btnMenuWW
+            // 
+            this.btnMenuWW.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMenuWW.FlatAppearance.BorderSize = 0;
+            this.btnMenuWW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuWW.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuWW.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
+            this.btnMenuWW.Image = global::ControleDeReservatorio.Properties.Resources.home;
+            this.btnMenuWW.Location = new System.Drawing.Point(0, 448);
+            this.btnMenuWW.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnMenuWW.Name = "btnMenuWW";
+            this.btnMenuWW.Size = new System.Drawing.Size(307, 74);
+            this.btnMenuWW.TabIndex = 4;
+            this.btnMenuWW.Text = "Painel WW";
+            this.btnMenuWW.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnMenuWW.UseVisualStyleBackColor = true;
+            this.btnMenuWW.Click += new System.EventHandler(this.bntMenuWW_Click);
+            this.btnMenuWW.Leave += new System.EventHandler(this.btnMenuWW_Leave);
+            // 
+            // btnMenuRW
+            // 
+            this.btnMenuRW.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMenuRW.FlatAppearance.BorderSize = 0;
+            this.btnMenuRW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuRW.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuRW.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
+            this.btnMenuRW.Image = global::ControleDeReservatorio.Properties.Resources.home;
+            this.btnMenuRW.Location = new System.Drawing.Point(0, 374);
+            this.btnMenuRW.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnMenuRW.Name = "btnMenuRW";
+            this.btnMenuRW.Size = new System.Drawing.Size(307, 74);
+            this.btnMenuRW.TabIndex = 3;
+            this.btnMenuRW.Text = "Painel RW";
+            this.btnMenuRW.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnMenuRW.UseVisualStyleBackColor = true;
+            this.btnMenuRW.Click += new System.EventHandler(this.btnMenuRW_Click);
+            this.btnMenuRW.Leave += new System.EventHandler(this.btnMenuRW_Leave);
+            // 
+            // btnMenuRF
+            // 
+            this.btnMenuRF.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMenuRF.FlatAppearance.BorderSize = 0;
+            this.btnMenuRF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuRF.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMenuRF.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(175)))), ((int)(((byte)(215)))));
+            this.btnMenuRF.Image = global::ControleDeReservatorio.Properties.Resources.home;
+            this.btnMenuRF.Location = new System.Drawing.Point(0, 300);
+            this.btnMenuRF.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnMenuRF.Name = "btnMenuRF";
+            this.btnMenuRF.Size = new System.Drawing.Size(307, 74);
+            this.btnMenuRF.TabIndex = 2;
+            this.btnMenuRF.Text = "Painel RF";
+            this.btnMenuRF.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnMenuRF.UseVisualStyleBackColor = true;
+            this.btnMenuRF.Click += new System.EventHandler(this.btnMenuRF_Click);
+            this.btnMenuRF.Leave += new System.EventHandler(this.btnMenuRF_Leave);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::ControleDeReservatorio.Properties.Resources.Usuario;
@@ -317,14 +348,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
-            // 
-            // pnl_form_loader
-            // 
-            this.pnl_form_loader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnl_form_loader.Location = new System.Drawing.Point(307, 0);
-            this.pnl_form_loader.Name = "pnl_form_loader";
-            this.pnl_form_loader.Size = new System.Drawing.Size(1471, 898);
-            this.pnl_form_loader.TabIndex = 1;
             // 
             // FormControlPanel
             // 
@@ -346,6 +369,7 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -373,6 +397,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pnl_nav;
         private System.Windows.Forms.Panel pnl_form_loader;
+        private System.Windows.Forms.Button btnRegiterUser;
+        private System.Windows.Forms.BindingSource bindingSource1;
     }
 }
 

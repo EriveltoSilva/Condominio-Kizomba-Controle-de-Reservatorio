@@ -11,6 +11,8 @@ using System.IO.Ports;
 using System.Media;
 using ControleDeReservatorio.Models;
 
+
+
 namespace ControleDeReservatorio
 {
 
@@ -20,6 +22,8 @@ namespace ControleDeReservatorio
         private FormMonitoring formMonitoringRF;
         private FormMonitoring formMonitoringRW;
         private FormMonitoring formMonitoringWW;
+        private FormRegister formRegister;
+        private UserModel user;
 
         public FormControlPanel()
         {
@@ -40,6 +44,9 @@ namespace ControleDeReservatorio
             formMonitoringWW = new FormMonitoring("CONTROLE DO WW1 & WW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
             formMonitoringWW.FormBorderStyle = FormBorderStyle.None;
 
+            formRegister = new FormRegister(this.user) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formRegister.FormBorderStyle = FormBorderStyle.None;
+
             this.pnl_form_loader.Controls.Clear();
             this.pnl_form_loader.Controls.Add(formMonitoringRF);
             formMonitoringRF.Show();
@@ -49,6 +56,7 @@ namespace ControleDeReservatorio
         {
             InitializeComponent();
             initSerial();
+            this.user = user;
             lbl_username.Text = user.getUsername();
             lbl_login_date.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
             pnl_nav.Height = btnMenuRF.Height;
@@ -64,6 +72,9 @@ namespace ControleDeReservatorio
 
             formMonitoringWW = new FormMonitoring("CONTROLE DO WW1 & WW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
             formMonitoringWW.FormBorderStyle = FormBorderStyle.None;
+
+            formRegister = new FormRegister(this.user) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formRegister.FormBorderStyle = FormBorderStyle.None;
 
             this.pnl_form_loader.Controls.Clear();
             this.pnl_form_loader.Controls.Add(formMonitoringRF);
@@ -190,12 +201,7 @@ namespace ControleDeReservatorio
             btnMenuRF.BackColor = Color.FromArgb(24, 30, 54);
             btnMenuRW.BackColor = Color.FromArgb(24, 30, 54);
             btnMenuWW.BackColor = Color.FromArgb(24, 30, 54);
-        }
-
-
-        private void lblWaterReading1_Click(object sender, EventArgs e)
-        {
-
+            btnRegiterUser.BackColor = Color.FromArgb(24, 30, 54);
         }
 
         private void hideFields()
@@ -204,6 +210,7 @@ namespace ControleDeReservatorio
             formMonitoringRF.Hide();
             formMonitoringRW.Hide();
             formMonitoringWW.Hide();
+            formRegister.Hide();
         }
         private void btnMenuRF_Click(object sender, EventArgs e)
         {
@@ -263,6 +270,19 @@ namespace ControleDeReservatorio
         {
             closeCOMPort();
             Application.Exit();
+        }
+
+        private void btnRegiterUser_Click(object sender, EventArgs e)
+        {
+            cleanAllBackground();
+            pnl_nav.Height = btnRegiterUser.Height;
+            pnl_nav.Top = btnRegiterUser.Top;
+            pnl_nav.Left = btnRegiterUser.Left;
+            btnRegiterUser.BackColor = Color.FromArgb(46, 51, 73);
+
+            hideFields();
+            this.pnl_form_loader.Controls.Add(formRegister);
+            formRegister.Show();
         }
     }
 }

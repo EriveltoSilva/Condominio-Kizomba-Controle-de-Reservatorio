@@ -7,11 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Mail;
 
 namespace ControleDeReservatorio
 {
     public partial class FormMonitoring : Form
     {
+        private bool globalSendEmailFlag = false;
+        private string receiverEmail = "eriveltoclenio@gmail.com";
+
+
+        private bool flag1_0 = true, flag1_10=true, flag1_20=true, flag1_30=true;
+        private bool flag2_0 = true, flag2_10 = true, flag2_20 = true, flag2_30 = true;
+
+
+
         public FormMonitoring()
         {
             InitializeComponent();
@@ -48,6 +58,35 @@ namespace ControleDeReservatorio
                 imageReserve1.Load("../../Resources/reservatorio" + path + ".png");
             else
                 imageReserve2.Load("../../Resources/reservatorio" + path + ".png");
+        }
+
+        private bool sendAlertEmail(string receiverEmail,string subject,string body)
+        {
+            if(globalSendEmailFlag)
+            {
+                try
+                {
+                    lbl_sendEmail.Visible = true;
+                    MailMessage mail = new MailMessage();
+                    SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                    mail.From = new MailAddress("techfutureangola@gmail.com");
+                    mail.To.Add(receiverEmail);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    smtp.Port = 587;
+                    smtp.Credentials = new System.Net.NetworkCredential("techfutureangola@gmail.com", "uosxmtlhqigkyiby");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                    lbl_sendEmail.Visible = false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    lbl_sendEmail.Visible = false;
+                    return false;
+                }
+            }
+            return true;
         }
 
         
@@ -92,21 +131,41 @@ namespace ControleDeReservatorio
             {
                 lblWaterLevel1.Text = "VAZIO";
                 lblWaterReading1.Text = "0%";
+                if (flag1_0)
+                {
+                    flag1_0 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:1\nNIVEL DO RESERVATÓRIO VAZIO.\n PERCENTAGEM=0%");
+                }
             }
             else if (value1.Equals("1"))
             {
                 lblWaterLevel1.Text = "CRITICO";
                 lblWaterReading1.Text = "10%";
+                if (flag1_10)
+                {
+                    flag1_10 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:1\nNIVEL DO RESERVATÓRIO CRITICO.\nPERCENTAGEM=10%");
+                }
             }
             else if (value1.Equals("2"))
             {
                 lblWaterLevel1.Text = "QUASE VAZIO";
                 lblWaterReading1.Text = "20%";
+                if (flag1_20)
+                {
+                    flag1_20 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:1\nNIVEL DO RESERVATÓRIO QUASE VAZIO.\n PERCENTAGEM=20%");
+                }
             }
             else if (value1.Equals("3"))
             {
                 lblWaterLevel1.Text = "BAIXO";
                 lblWaterReading1.Text = "30%";
+                if (flag1_30)
+                {
+                    flag1_30 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:1\nNIVEL DO RESERVATÓRIO BAIXO.\n PERCENTAGEM=30%");
+                }
             }
             else if (value1.Equals("4"))
             {
@@ -137,6 +196,7 @@ namespace ControleDeReservatorio
             {
                 lblWaterLevel1.Text = "QUASE CHEIO";
                 lblWaterReading1.Text = "90%";
+                flag1_0 = flag1_10 = flag1_20 = flag1_30 = true;
             }
             else if (value1.Equals("10"))
             {
@@ -149,21 +209,41 @@ namespace ControleDeReservatorio
             {
                 lblWaterLevel2.Text = "VAZIO";
                 lblWaterReading2.Text = "0%";
+                if (flag2_0)
+                {
+                    flag2_0 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:2\nNIVEL DO RESERVATÓRIO QUASE VAZIO.\n PERCENTAGEM=20%");
+                }
             }
             else if ("1".Equals(value2))
             {
                 lblWaterLevel2.Text = "CRITICO";
                 lblWaterReading2.Text = "10%";
+                if (flag2_10)
+                {
+                    flag2_10 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:2\nNIVEL DO RESERVATÓRIO QUASE VAZIO.\n PERCENTAGEM=20%");
+                }
             }
             else if ("2".Equals(value2))
             {
                 lblWaterLevel2.Text = "QUASE VAZIO";
                 lblWaterReading2.Text = "20%";
+                if (flag1_20)
+                {
+                    flag1_20 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:2\nNIVEL DO RESERVATÓRIO QUASE VAZIO.\n PERCENTAGEM=20%");
+                }
             }
             else if ("3".Equals(value2))
             {
                 lblWaterLevel2.Text = "BAIXO";
                 lblWaterReading2.Text = "30%";
+                if (flag2_30)
+                {
+                    flag2_30 = false;
+                    sendAlertEmail(this.receiverEmail, this.lbl_active_menu.Text, "RESERVATORIO:2\nNIVEL DO RESERVATÓRIO BAIXO.\n PERCENTAGEM=30%");
+                }
             }
             else if ("4".Equals(value2))
             {
@@ -194,6 +274,7 @@ namespace ControleDeReservatorio
             {
                 lblWaterLevel2.Text = "QUASE CHEIO";
                 lblWaterReading2.Text = "90%";
+                flag2_0 = flag2_10 = flag2_20 = flag2_30 = true;
             }
             else if ("10".Equals(value2))
             {

@@ -44,6 +44,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.lbl_active_menu = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
+            this.lbl_sendEmail = new System.Windows.Forms.Label();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageReserve2)).BeginInit();
             this.panel8.SuspendLayout();
@@ -234,12 +235,25 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // lbl_sendEmail
+            // 
+            this.lbl_sendEmail.AutoSize = true;
+            this.lbl_sendEmail.Font = new System.Drawing.Font("Nirmala UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_sendEmail.ForeColor = System.Drawing.Color.White;
+            this.lbl_sendEmail.Location = new System.Drawing.Point(1154, 47);
+            this.lbl_sendEmail.Name = "lbl_sendEmail";
+            this.lbl_sendEmail.Size = new System.Drawing.Size(174, 30);
+            this.lbl_sendEmail.TabIndex = 2;
+            this.lbl_sendEmail.Text = "Enviando emaill...";
+            this.lbl_sendEmail.Visible = false;
+            // 
             // FormMonitoring
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(1471, 898);
+            this.Controls.Add(this.lbl_sendEmail);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.lbl_active_menu);
             this.Controls.Add(this.panel7);
@@ -281,5 +295,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lbl_active_menu;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Label lbl_sendEmail;
     }
 }
