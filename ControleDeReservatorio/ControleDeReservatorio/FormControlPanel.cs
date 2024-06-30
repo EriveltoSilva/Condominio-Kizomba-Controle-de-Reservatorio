@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.Media;
+using ControleDeReservatorio.Models;
 
 namespace ControleDeReservatorio
 {
@@ -23,13 +24,26 @@ namespace ControleDeReservatorio
             initSerial();
         }
 
+        public FormControlPanel(UserModel user)
+        {
+            InitializeComponent();
+            initSerial();
+            lbl_username.Text = user.getUsername();
+        }
+
         private void btnExit_Click(object sender, EventArgs e)
         {
             closeCOMPort();
             Application.Exit();
         }
 
-        
+        /*private void btn_menu_ir_login_Click(object sender, EventArgs e)
+        {
+            fecharPortaCom();
+            Hide();
+            new FormularioLogin().Show();
+        }*/
+
 
         private void btnConnect_Click(object sender, EventArgs e)
         {

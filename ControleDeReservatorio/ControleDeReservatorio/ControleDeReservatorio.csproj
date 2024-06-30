@@ -46,16 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAO\CadastroDAO.cs" />
-    <Compile Include="DAO\LoginDAO.cs" />
+    <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="FormLogin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\CadastroModelo.cs" />
-    <Compile Include="Models\LoginModelo.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="FormControlPanel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +120,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\reservatorio100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\login.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
