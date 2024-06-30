@@ -190,7 +190,6 @@ namespace ControleDeReservatorio
             btnMenuRF.BackColor = Color.FromArgb(24, 30, 54);
             btnMenuRW.BackColor = Color.FromArgb(24, 30, 54);
             btnMenuWW.BackColor = Color.FromArgb(24, 30, 54);
-
         }
 
 

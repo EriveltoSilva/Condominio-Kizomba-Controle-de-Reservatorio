@@ -43,6 +43,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.lbl_active_menu = new System.Windows.Forms.Label();
+            this.btnExit = new System.Windows.Forms.Button();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageReserve2)).BeginInit();
             this.panel8.SuspendLayout();
@@ -218,12 +219,28 @@
             this.lbl_active_menu.TabIndex = 11;
             this.lbl_active_menu.Text = "CONTROLE DE RESERVATÓRIOS";
             // 
+            // btnExit
+            // 
+            this.btnExit.FlatAppearance.BorderSize = 0;
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.Color.White;
+            this.btnExit.Location = new System.Drawing.Point(1392, 13);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(45, 52);
+            this.btnExit.TabIndex = 12;
+            this.btnExit.Text = "x";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // FormMonitoring
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(1471, 898);
+            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.lbl_active_menu);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel5);
@@ -263,5 +280,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lbl_active_menu;
+        private System.Windows.Forms.Button btnExit;
     }
 }
