@@ -89,6 +89,9 @@ bool flagAlarme2 = false;
 bool alarmeActive1 = false;
 bool alarmeActive2 = false;
 
+bool flag1_envio0=false, flag1_envio10=false, flag1_envio20=false, flag1_envio30=false;
+bool flag2_envio0=false, flag2_envio10=false, flag2_envio20=false, flag2_envio30=false;
+
 unsigned long int temporizador = 0;
 unsigned long int timerAlarme1 = 0;
 unsigned long int timerAlarme2 = 0;
@@ -100,6 +103,9 @@ String status1 = STATUS_VAZIO;       /////
 String leituraReservatorio2 = ZERO;  /////
 String nivelReservatorio2 = VAZIO;   /////
 String status2 = STATUS_VAZIO;       /////
+
+const String PHONE_NUMBER1 = "+244940811141";
+const String PHONE_NUMBER2 = "+244940811141";
 
 void setup() 
 {
@@ -310,6 +316,7 @@ void lerSensores1() {
     status1="10";
     alarmeActive1=false;
     flagAlarme1=false;
+    
   }
 
   // Segundo Nivel - 90% - 4,05 m^2 - um led apagado
@@ -320,6 +327,7 @@ void lerSensores1() {
     status1="9";
     alarmeActive1=false;
     flagAlarme1=false;
+    flag1_envio0 = flag1_envio10 = flag1_envio20 = flag1_envio30 = false;
   }
 
   // terceiro Nivel - 80% - 3,6 m^2 - dois leds apagados
@@ -379,6 +387,11 @@ void lerSensores1() {
     leituraReservatorio1 = "30%";
     status1="3";
     alarmeActive1=true;
+    if(!flag1_envio30)
+    {
+      flag1_envio30=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE BAIXO");
+    }
   }
 
   // Nono Nivel - 20% - 0,9 m^2 - oito leds apagados
@@ -388,6 +401,11 @@ void lerSensores1() {
     leituraReservatorio1 = "20%";
     status1="2";
     alarmeActive1=true;
+    if(!flag1_envio10)
+    {
+      flag1_envio10=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE CRITICO");
+    }
   }
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
   else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
@@ -396,6 +414,11 @@ void lerSensores1() {
     leituraReservatorio1 = "10%";
     status1="1";
     alarmeActive1=true;
+    if(!flag1_envio10)
+    {
+      flag1_envio10=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE CRITICO");
+    }
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
@@ -405,6 +428,11 @@ void lerSensores1() {
     leituraReservatorio1 = "0%";
     status1="0";
     alarmeActive1=true;
+    if(!flag1_envio0)
+    {
+      flag1_envio0=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE VAZIO");
+    }
   }
 }
 
@@ -455,6 +483,7 @@ void lerSensores2() {
     status2 = "9";
     alarmeActive2=false;
     flagAlarme2=false;
+    flag2_envio0 = flag2_envio10 = flag2_envio20 = flag2_envio30 = false;
   }
 
   // terceiro Nivel - 80% - 3,6 m^2 - dois leds apagados
@@ -514,6 +543,11 @@ void lerSensores2() {
     leituraReservatorio2 = "30%";
     status2 = "3";
     alarmeActive2=true;
+    if(!flag2_envio30)
+    {
+      flag2_envio30=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE BAIXO");
+    }
   }
 
   // Nono Nivel - 20% - 0,9 m^2 - oito leds apagados
@@ -523,6 +557,11 @@ void lerSensores2() {
     leituraReservatorio2 = "20%";
     status2 = "2";
     alarmeActive2=true;
+    if(!flag2_envio20)
+    {
+      flag2_envio20=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE QUASE VAZIO");
+    }
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
@@ -532,6 +571,11 @@ void lerSensores2() {
     leituraReservatorio2 = "10%";
     status2 = "1";
     alarmeActive2=true;
+    if(!flag2_envio10)
+    {
+      flag2_envio10=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE CRITICO");
+    }
   }
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
@@ -542,6 +586,11 @@ void lerSensores2() {
     leituraReservatorio2 = "0%";
     status2 = "0";
     alarmeActive2=true;
+    if(!flag2_envio0)
+    {
+      flag2_envio0=true;
+      sendSMS(PHONE_NUMBER1,"ALERTA TANQUE VAZIO");
+    }
   }
 }
 
@@ -591,67 +640,29 @@ void pedirDados()
   if(++numReservatorio>2)numReservatorio=1;
 }
 
-
-/*
-
-///////////////////////////////////////////////////////////////////////////////////
-void MedioMessage() {
-  gsm.println("AT+CMGF=1");
-  delay(1000);
-
-  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  gsm.println("Tanque FW1 a 50%, Nivel ao Meio");
+void sendSMS(const String number, String sms)
+{
+  Serial.print("SMS: "); Serial.println(sms);
+  Serial2.println("AT+CMGF=1");
+  delay(1000);  comunication();
+  Serial2.println("AT+CMGS=\"" + number + "\"\r");
+  delay(1000);  comunication();
+  Serial2.println(sms);
   delay(100);
-  gsm.println((char)26);
-  delay(1000);
+  Serial2.println((char)26);
+  delay(1000);  comunication();
+  delay(4000);
+  Serial.println("\n################ SMS SENT! #################");
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-void CriticoMessage() {
-  gsm.println("AT+CMGF=1");
-  delay(1000);
+/////////////////////////////////////////////////////////
+void comunication()
+{
+  if (Serial.available())
+    while (Serial.available())
+      Serial2.write(Serial.read());
 
-  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  gsm.println("Tanque FW1 a 30%, Nivel Critico");
-  delay(100);
-  gsm.println((char)26);
-  delay(1000);
+  if (Serial2.available())
+    while (Serial2.available())
+      Serial.write(Serial2.read());
 }
-
-///////////////////////////////////////////////////////////////////////////////////
-void SuperCriticoMessage() {
-  gsm.println("AT+CMGF=1");
-  delay(1000);
-
-  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  gsm.println("Tanque FW1 a 10%, Nivel Super Critico");
-  delay(100);
-  gsm.println((char)26);
-  delay(1000);
-}
-
-///////////////////////////////////////////////////////////////////////////////////
-void VazioMessage() {
-  gsm.println("AT+CMGF=1");
-  delay(1000);
-
-  gsm.println("AT+CMGS=\"+244946128147\"\r");  //your number here
-  gsm.println("AT+CMGS=\"+244928322931\"\r");  //your number here
-  delay(1000);
-
-  gsm.println("Tanque FW1 Vazio");
-  delay(100);
-  gsm.println((char)26);
-  delay(1000);
-}
-
-*/
