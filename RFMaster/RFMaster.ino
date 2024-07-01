@@ -225,7 +225,7 @@ void enviarDados() {
   String texto = String(NOME) + "*";
   texto += status1 + "*" + status2 + "*";
   Serial.println(texto);
-  //Serial3.println(texto);
+  Serial.println(texto);
 }
 
 //////////////////////////////////////////////////////////

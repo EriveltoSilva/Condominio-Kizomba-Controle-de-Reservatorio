@@ -33,6 +33,11 @@ namespace ControleDeReservatorio
             lbl_active_menu.Text = title;
         }
 
+        private void lbl_sendEmail_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void FormMonitoring_Load(object sender, EventArgs e)
         {
 
@@ -53,11 +58,13 @@ namespace ControleDeReservatorio
             else if (nivel == "8") path = "80";
             else if (nivel == "9") path = "80";
             else if (nivel == "10") path = "100";
-
-            if (numReserve == 1)
-                imageReserve1.Load("../../Resources/reservatorio" + path + ".png");
-            else
-                imageReserve2.Load("../../Resources/reservatorio" + path + ".png");
+            if(!path.Equals(""))
+            {
+                if (numReserve == 1)
+                    imageReserve1.Load("../../Resources/reservatorio" + path + ".png");
+                else
+                    imageReserve2.Load("../../Resources/reservatorio" + path + ".png");
+            }
         }
 
         private bool sendAlertEmail(string receiverEmail,string subject,string body)

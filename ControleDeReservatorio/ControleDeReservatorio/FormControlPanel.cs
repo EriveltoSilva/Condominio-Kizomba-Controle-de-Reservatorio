@@ -35,13 +35,13 @@ namespace ControleDeReservatorio
             pnl_nav.Left = btnMenuRF.Left;
             btnMenuRF.BackColor = Color.FromArgb(46, 51, 73);
 
-            formMonitoringRF = new FormMonitoring("CONTROLE DO RF1 & RF2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRF = new FormMonitoring("PAINEL  FW1 e FW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
             formMonitoringRF.FormBorderStyle = FormBorderStyle.None;
 
-            formMonitoringRW = new FormMonitoring("CONTROLE DO RW1 & RW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRW = new FormMonitoring("PAINEL RW1 e RW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
             formMonitoringRW.FormBorderStyle = FormBorderStyle.None;
 
-            formMonitoringWW = new FormMonitoring("CONTROLE DO WW1 & WW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringWW = new FormMonitoring("PAINEL WW1 e WW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
             formMonitoringWW.FormBorderStyle = FormBorderStyle.None;
 
             formRegister = new FormRegister(this.user) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
@@ -64,7 +64,7 @@ namespace ControleDeReservatorio
             pnl_nav.Left = btnMenuRF.Left;
             btnMenuRF.BackColor = Color.FromArgb(46, 51, 73);
         
-            formMonitoringRF = new FormMonitoring("CONTROLE DO RF1 & RF2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
+            formMonitoringRF = new FormMonitoring("CONTROLE DO FW1 & FW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
             formMonitoringRF.FormBorderStyle = FormBorderStyle.None;
 
             formMonitoringRW = new FormMonitoring("CONTROLE DO RW1 & RW2") { Dock = DockStyle.Fill, TopLevel = false, TopMost = true };
@@ -94,10 +94,11 @@ namespace ControleDeReservatorio
             {
                 closeCOMPort();
                 btnConnect.Text = "Conectar";
-                btnConnect.ForeColor = Color.Red;
+                btnConnect.ForeColor = Color.Green;
                 cbBaudRate.Enabled = true;
                 cbSerialPort.Enabled = true;
                 btnUpdateSerialPorts.Enabled = true;
+                pnl_serial.Visible = true;
             }
             else
             {
@@ -107,10 +108,11 @@ namespace ControleDeReservatorio
                 {
                     serialPort1.Open();
                     btnConnect.Text = "Desconectar";
-                    btnConnect.ForeColor = Color.Green;
+                    btnConnect.ForeColor = Color.Red;
                     cbBaudRate.Enabled = false;
                     cbSerialPort.Enabled = false;
                     btnUpdateSerialPorts.Enabled = false;
+                    pnl_serial.Visible = false;
                     MessageBox.Show("Comunicação com os Reservatórios Estabelecida com Sucesso!", "Comunicação", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch
@@ -188,12 +190,16 @@ namespace ControleDeReservatorio
         {
             // 0-R, 1-nivelReservatorio1, 2- leituraReservatorio1, 3-nivelReservatorio2, 4- leituraReservatorio2,
             String[] dados = serialPort1.ReadLine().Split('*');
-            if(dados[0]=="RF" && formMonitoringRF != null)
+            if (dados.Length==4)
+            {
+
+            if(dados[0]=="FW" && formMonitoringRF != null)
                 formMonitoringRF.setData(dados);
             else if(dados[0] == "RW" && formMonitoringRW != null)
                 formMonitoringRW.setData(dados);
             else if (dados[0] == "WW" && formMonitoringWW != null)
                 formMonitoringWW.setData(dados);
+            }
         }
 
         private void cleanAllBackground()

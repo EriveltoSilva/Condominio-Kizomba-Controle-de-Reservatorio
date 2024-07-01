@@ -19,3 +19,15 @@ C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\Cont
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormLogin.resources
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormMonitoring.resources
 C:\Users\cleni\Documents\GitHub\Condominio-Kizomba-Controle-de-Reservatorio\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormRegister.resources
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\bin\Debug\ControleDeReservatorio.exe.config
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.exe
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.pdb
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\bin\Debug\ControleDeReservatorio.exe
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\bin\Debug\ControleDeReservatorio.pdb
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.csprojResolveAssemblyReference.cache
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormControlPanel.resources
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormLogin.resources
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormMonitoring.resources
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.FormRegister.resources
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.Properties.Resources.resources
+C:\Users\HP\Documents\ControleDeReservatorio\ControleDeReservatorio\obj\Debug\ControleDeReservatorio.csproj.GenerateResource.Cache
