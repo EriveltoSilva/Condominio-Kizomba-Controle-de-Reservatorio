@@ -423,7 +423,7 @@ void lerSensores1() {
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
   else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
-      && (sensor5 == 0) && (sensor4 == 1) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 0)) {
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 0)) {
     nivelReservatorio1 = "VAZIO";
     leituraReservatorio1 = "0%";
     status1="0";
@@ -580,7 +580,7 @@ void lerSensores2() {
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
   else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
-      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 1)) {
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 0)) {
     Serial.println("Nivel 0%");
     nivelReservatorio2 = "VAZIO";
     leituraReservatorio2 = "0%";

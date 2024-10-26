@@ -17,12 +17,11 @@
  // Enviar Mensagem quando: 0, 10, 30, 40, 
 */
 ////////////////////// Definições /////////////////////
-//#define DEBUG false
 #define NOME "RW"
 #define R1_NOME "RW1"
 #define R2_NOME "RW2"
 #define DEBUG false    // Se tiver tudo OK, usa-me
-//#define DEBUG true   // Se tiver bug, usa-me
+// #define DEBUG true   // Se tiver bug, usa-me
 
 
 
@@ -385,7 +384,7 @@ void lerSensores1() {
 
   // Decimo Nivel - 10% - 0,45 m^2 - nove leds apagados
   else if ((sensor10 == 0) && (sensor9 == 0) && (sensor8 == 0) && (sensor7 == 0) && (sensor6 == 0)
-      && (sensor5 == 0) && (sensor4 == 1) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 0)) {
+      && (sensor5 == 0) && (sensor4 == 0) && (sensor3 == 0) && (sensor2 == 0) && (sensor1 == 0)) {
     nivelReservatorio1 = "VAZIO";
     leituraReservatorio1 = "0%";
     status1="0";
